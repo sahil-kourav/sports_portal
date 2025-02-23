@@ -6,26 +6,31 @@ const userSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
+
     email: {
         type: String,
         required: true,
         unique: true,
         lowercase: true
     },
+
     password: {
         type: String,
         required: true
     },
+
     phone: {
         type: String,
         unique: true,
-        sparse: true // ✅ Ensures uniqueness but allows null values
+        sparse: true 
     },
+
     gender: {
         type: String,
         enum: ["male", "female", "other"],
         default: "other"
     },
+    
     dob: {
         type: Date
     },
@@ -35,7 +40,7 @@ const userSchema = new mongoose.Schema({
         default: "user"
     },
     sportsInterest: {
-        type: [String], // ✅ Example: ["Cricket", "Football"]
+        type: [String], 
         default: []
     },
     enrolledTournaments: [

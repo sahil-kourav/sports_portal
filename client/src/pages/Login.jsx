@@ -1,3 +1,5 @@
+
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useLoginUserMutation } from "@/features/api/authApi";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
@@ -16,6 +19,10 @@ import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [loginInput, setLoginInput] = useState({ email: "", password: "" });
+  const [loginUser, { data: loginData, error: loginError, isLoading: loginIsLoading, isSuccess: loginIsSuccess }] =
+    useLoginUserMutation();
+
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -26,8 +33,18 @@ const Login = () => {
     await loginUser(loginInput);
   };
 
+  useEffect(() => {
+    if (loginIsSuccess && loginData) {
+      toast.success(loginData.message || "Login successful! Redirecting...");
+      navigate("/");
+    }
+    if (loginError) {
+      toast.error(loginError.message || "Login failed. Please try again.");
+    }
+  }, [loginIsSuccess, loginData, loginError, navigate]);
+
   return (
-<div className="flex items-center justify-center min-h-screen bg-gray-100">
+<div className="flex items-center justify-center min-h-screen">
 <Card className="w-full max-w-md p-5 bg-white rounded-2xl shadow-lg ">
         <CardHeader className="text-center">
           <CardTitle className="text-3xl mb-1 font-bold text-gray-800">Welcome Back!</CardTitle>
@@ -66,9 +83,16 @@ const Login = () => {
         <CardFooter className="flex flex-col space-y-4">
           <Button
             className="bg-blue-600 w-full hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md"
+            disabled={loginIsLoading}
             onClick={handleLogin}
           >
-            Login
+            {loginIsLoading ? (
+              <>
+                <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Logging In...
+              </>
+            ) : (
+              "Log In"
+            )}
           </Button>
           <p className="text-center text-sm text-gray-500">
             Don’t have an account?{" "}
@@ -77,7 +101,7 @@ const Login = () => {
             </a>
           </p>
           <p className="text-center text-xs text-gray-400 mt-4">
-            Powered by <span className="font-bold text-gray-700">NeuroSkill</span>
+            Powered by <span className="font-bold text-gray-700">Sports Portal</span>
           </p>
         </CardFooter>
       </Card>

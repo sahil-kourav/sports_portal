@@ -9,6 +9,7 @@ import {
   } from "@/components/ui/card";
   import { Input } from "@/components/ui/input";
   import { Label } from "@/components/ui/label";
+  import { useRegisterUserMutation } from "@/features/api/authApi";
   import { Loader2 } from "lucide-react";
   import { toast } from "sonner";
   import { useState, useEffect } from "react";
@@ -16,6 +17,8 @@ import {
   
   const Register = () => {
     const [registerInput, setRegisterInput] = useState({ name: "", email: "", password: "" });
+    const [registerUser, { data: registerData, error: registerError, isLoading: registerIsLoading, isSuccess: registerIsSuccess }] =
+      useRegisterUserMutation();
   
     const navigate = useNavigate();
   
@@ -24,8 +27,22 @@ import {
       setRegisterInput({ ...registerInput, [name]: value });
     };
   
+    const handleRegister = async () => {
+      await registerUser(registerInput);
+    };
+  
+    useEffect(() => {
+      if (registerIsSuccess && registerData) {
+        toast.success(registerData.message || "Registration successful! Redirecting...");
+        navigate("/login");  // Redirect to login after successful registration
+      }
+      if (registerError) {
+        toast.error(registerError.message || "Registration failed. Please try again.");
+      }
+    }, [registerIsSuccess, registerData, registerError, navigate]);
+  
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="flex items-center justify-center min-h-screen">
         <Card className="w-full max-w-md p-5 bg-white rounded-2xl shadow-lg">
           <CardHeader className="text-center">
             <CardTitle className="text-3xl mb-1 font-bold text-gray-800">Create an Account</CardTitle>
@@ -76,8 +93,16 @@ import {
           <CardFooter className="flex flex-col space-y-4">
             <Button
               className="bg-blue-600 w-full hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md"
+              disabled={registerIsLoading}
+              onClick={handleRegister}
             >
-              Sign Up
+              {registerIsLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Registering...
+                </>
+              ) : (
+                "Sign Up"
+              )}
             </Button>
             <p className="text-center text-sm text-gray-500">
               Already have an account?{" "}
