@@ -32,10 +32,26 @@ export const authApi = createApi({
                 }
             }
         }),
+        logoutUser: builder.mutation({
+            query: () => ({
+                url: "logout",
+                method: "POST",
+                credentials: "include",
+            }),
+            async onQueryStarted(_, { queryFulfilled, dispatch }) {
+                try {
+                    await queryFulfilled;
+                    dispatch(userLoggedOut()); // Clear Redux state
+                } catch (error) {
+                    console.log("Logout failed:", error);
+                }
+            }
+        }),        
     })
 });
 
 export const {
     useRegisterUserMutation,
     useLoginUserMutation,
+    useLogoutUserMutation 
 } = authApi;

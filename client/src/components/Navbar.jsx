@@ -22,13 +22,28 @@ import {
 } from './ui/sheet';
 import { Separator } from '@radix-ui/react-dropdown-menu';
 import { Link } from 'react-router-dom';
+import { useLogoutUserMutation } from '@/features/api/authApi';
+import { useDispatch, useSelector } from 'react-redux';
+import { userLoggedOut } from '@/features/authSlice';
 
 const Navbar = () => {
-  const user = true;
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth); // Get user state from Redux
+  const [logoutUser] = useLogoutUserMutation();
+
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+      dispatch(userLoggedOut());
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+
   return (
     <div className="h-16 dark:bg-[#020817] bg-white border-b dark:border-b-gray-800 border-b-gray-200 fixed top-0 left-0 right-0 duration-300 z-10">
       {/* Desktop */}
-      <div className="max-w-7xl mx-auto  hidden md:flex justify-between items-center gap-10 h-full">
+      <div className="max-w-7xl mx-auto hidden md:flex justify-between items-center gap-10 h-full">
         <div className="flex items-center gap-2">
           <School size={"30"} />
           <h1 className="hidden md:block font-bold text-2xl">SportXpert</h1>
@@ -39,35 +54,36 @@ const Navbar = () => {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Avatar>
-                  <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-                  <AvatarFallback>CN</AvatarFallback>
+                  <AvatarImage src={user.avatar || "https://github.com/shadcn.png"} alt={user.name || "User"} />
+                  <AvatarFallback>{user.name?.charAt(0) || "U"}</AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56 mr-5">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                <DropdownMenuItem>Dashboard</DropdownMenuItem>
+                  <DropdownMenuItem><Link to="dashboard">Dashboard</Link></DropdownMenuItem>
                   <DropdownMenuItem><Link to="profile">Edit Profile</Link></DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Log out</DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
+                  Log out
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
             <div className="flex items-center gap-6">
               <Button variant="outline"><Link to="login">Login</Link></Button>
-              <Button><Link to="login">Signup</Link></Button>
+              <Button><Link to="signup">Signup</Link></Button>
             </div>
           )}
-          {/* <DarkMode /> */}
         </div>
       </div>
 
       {/* Mobile device */}
       <div className="flex md:hidden items-center justify-between px-4 h-full">
         <h1 className="font-extrabold text-2xl">SportXpert</h1>
-        <MobileNavbar />
+        <MobileNavbar user={user} handleLogout={handleLogout} />
       </div>
     </div>
   );
@@ -75,8 +91,7 @@ const Navbar = () => {
 
 export default Navbar;
 
-const MobileNavbar = () => {
-  const role = 'instructor';
+const MobileNavbar = ({ user, handleLogout }) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -87,21 +102,20 @@ const MobileNavbar = () => {
       <SheetContent className="flex flex-col">
         <SheetHeader className="flex flex-row items-center justify-between mt-2">
           <SheetTitle>SportXpert</SheetTitle>
-          {/* <DarkMode /> */}
         </SheetHeader>
         <Separator className="mr-2" />
         <nav className="flex flex-col space-y-4">
-          <span>SportXpert</span>
+          <span><Link to="dashboard">Dashboard</Link></span>
           <span><Link to="profile">Edit Profile</Link></span>
-          <p>Log out</p>
+          {user ? (
+            <p onClick={handleLogout} className="cursor-pointer text-red-500">Log out</p>
+          ) : (
+            <>
+              <Button variant="outline"><Link to="login">Login</Link></Button>
+              <Button><Link to="signup">Signup</Link></Button>
+            </>
+          )}
         </nav>
-        {role === 'instructor' && (
-          <SheetFooter> 
-            <SheetClose asChild>
-              <Button type="submit">SportXpert</Button>
-            </SheetClose>
-          </SheetFooter>
-        )}
       </SheetContent>
     </Sheet>
   );

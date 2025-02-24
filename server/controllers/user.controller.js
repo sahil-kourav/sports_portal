@@ -72,17 +72,41 @@ const login = async (req, res) => {
 
 const logout = async (_, res) => {
     try {
-        return res.status(200).cookie('token', '', { maxAge: 0 }).json({
-            message: 'Logged out successfully.',
-            success: true
-        });
+        return res
+            .status(200)
+            .cookie("token", "", {
+                httpOnly: true,
+                // secure: process.env.NODE_ENV === "production", // Use secure cookies in production
+                sameSite: "None", // Required for cross-site cookies
+                expires: new Date(0), // Proper way to expire the cookie
+            })
+            .json({
+                success: true,
+                message: "Logged out successfully."
+            });
     } catch (error) {
         console.log(error);
         return res.status(500).json({
             success: false,
-            message: 'Failed to logout'
+            message: "Failed to logout"
         });
     }
 };
+
+
+// const logout = async (_, res) => {
+//     try {
+//         return res.status(200).cookie('token', '', { maxAge: 0 }).json({
+//             message: 'Logged out successfully.',
+//             success: true
+//         });
+//     } catch (error) {
+//         console.log(error);
+//         return res.status(500).json({
+//             success: false,
+//             message: 'Failed to logout'
+//         });
+//     }
+// };
 
 module.exports = { register, login, logout }; // ✅ CommonJS export
