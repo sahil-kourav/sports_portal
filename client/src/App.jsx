@@ -4,6 +4,10 @@ import Login from "./pages/Login";
 import MainLayout from './layout/MainLayout';
 import { createBrowserRouter } from 'react-router-dom';
 import { RouterProvider } from 'react-router';
+import Profile from './pages/users/profile';
+import Tournament from './pages/users/Tournament';
+import Tournaments from './pages/users/Tournaments';
+import HeroSection from './pages/users/HeroSection';
 // import Footer from './components/Footer';
 
   const appRouter = createBrowserRouter([
@@ -15,8 +19,8 @@ import { RouterProvider } from 'react-router';
           path: "/",
           element:
           <>
-              {/* <HeroSection /> */}
-              {/* <Courses /> */}
+              <HeroSection />
+              <Tournaments />
               {/* <Footer/> */}
           </>
         },
@@ -27,6 +31,10 @@ import { RouterProvider } from 'react-router';
         {
           path:"register",
           element:<Register />
+        },
+        {
+          path:"profile",
+          element:<Profile />
         }
       ],
     },
