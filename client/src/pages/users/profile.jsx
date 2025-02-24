@@ -13,10 +13,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
 import React from "react";
-
+import Tournament from "./Tournament";
 
 const Profile = () => {
     const isLoading = false;
+    const enrolledTournament = [1];
   return (
     <div className="max-w-4xl mx-auto px-4 my-10">
       <h1 className="font-bold text-2xl text-center md:text-left">PROFILE</h1>
@@ -32,7 +33,7 @@ const Profile = () => {
             <h1 className="font-semibold text-gray-900 dark:text-gray-100">
               Name:
               <span className="font-normal text-gray-700 dark:text-gray-300 ml-2">
-                Sahil Kourav
+              Sahil Kourav
               </span>
             </h1>
           </div>
@@ -109,8 +110,8 @@ const Profile = () => {
           {enrolledTournament.length === 0 ? (
             <h1>You haven't enrolled yet</h1>
           ) : (
-            enrolledTournament.map((course, index) => (
-              <Tournament key={course} />
+            enrolledTournament.map((matches, index) => (
+              <Tournament key={matches} />
             ))
           )}
         </div>
