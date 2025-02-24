@@ -25,8 +25,7 @@ import HeroSection from './pages/users/HeroSection';
               <HeroSection />
               <Tournaments />
               {/* <Footer/> */}
-          <Navbar/>
-          <TournamentFeatures/>
+             <TournamentFeatures/>
               {/* <HeroSection /> */}
               {/* <Courses /> */}
               <Footer/>
