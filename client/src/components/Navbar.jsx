@@ -96,7 +96,7 @@ const MobileNavbar = () => {
           <p>Log out</p>
         </nav>
         {role === 'instructor' && (
-          <SheetFooter>
+          <SheetFooter> 
             <SheetClose asChild>
               <Button type="submit">SportXpert</Button>
             </SheetClose>
