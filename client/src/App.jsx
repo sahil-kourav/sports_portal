@@ -2,13 +2,12 @@ import './App.css'
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import MainLayout from './layout/MainLayout';
+import Footer from './components/Footer';
 import { createBrowserRouter } from 'react-router-dom';
 import { RouterProvider } from 'react-router';
 import Profile from './pages/users/profile';
-import Tournament from './pages/users/Tournament';
 import Tournaments from './pages/users/Tournaments';
 import HeroSection from './pages/users/HeroSection';
-// import Footer from './components/Footer';
 
   const appRouter = createBrowserRouter([
     {
@@ -22,6 +21,10 @@ import HeroSection from './pages/users/HeroSection';
               <HeroSection />
               <Tournaments />
               {/* <Footer/> */}
+             {/* <TournamentFeatures/> */}
+              {/* <HeroSection /> */}
+              {/* <Courses /> */}
+              <Footer/>
           </>
         },
         {
