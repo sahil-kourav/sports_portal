@@ -9,7 +9,7 @@ const Footer = () => {
           <div className="flex justify-center md:justify-start items-center">
             <span className="text-5xl">🏆</span>
           </div>
-          <p className="text-sm mt-3 opacity-75">&copy; 2025 TournamentHub, Inc.<br />All rights reserved.</p>
+          <p className="text-sm mt-3 opacity-75">&copy; 2025 SportXpert, Inc.<br />All rights reserved.</p>
           <div className="flex justify-center md:justify-start mt-4 space-x-4">
             <a href="#" className="text-xl hover:text-yellow-400 transition"><i className="fab fa-facebook"></i></a>
             <a href="#" className="text-xl hover:text-yellow-400 transition"><i className="fab fa-twitter"></i></a>
@@ -63,7 +63,7 @@ const Footer = () => {
         </div>
       </div>
       <div className="mt-10 text-center text-gray-500 text-sm w-full">
-        Powered by <span className="text-yellow-400">TournamentHub</span> ⚡ Bringing Sports to Life!
+        Powered by <span className="text-yellow-400">SportXpert</span> ⚡ Bringing Sports to Life!
       </div>
     </footer>
   );
