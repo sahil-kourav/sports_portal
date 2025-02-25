@@ -2,6 +2,9 @@ import './App.css'
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import MainLayout from './layout/MainLayout';
+import Navbar from './components/Navbar';
+import TournamentFeatures from './components/TournamentFeature';
+import Footer from './components/Footer';
 import { createBrowserRouter } from 'react-router-dom';
 import { RouterProvider } from 'react-router';
 import Profile from './pages/users/profile';
@@ -22,6 +25,10 @@ import HeroSection from './pages/users/HeroSection';
               <HeroSection />
               <Tournaments />
               {/* <Footer/> */}
+             {/* <TournamentFeatures/> */}
+              {/* <HeroSection /> */}
+              {/* <Courses /> */}
+              <Footer/>
           </>
         },
         {
