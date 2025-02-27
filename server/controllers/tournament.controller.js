@@ -1,4 +1,4 @@
-import Tournament from "../models/tournamentModel.js";
+const Tournament = require ("../models/tournament.model");
 
 const createTournament = async (req, res) => {
     try {
