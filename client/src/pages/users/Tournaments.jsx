@@ -10,12 +10,12 @@ const Tournaments = () => {
   return (
     <section className="bg-gradient-to-b from-white to-gray-50 min-h-screen py-16 px-4 sm:px-8">
       <div className="max-w-7xl mx-auto text-center">
-        <h2 className="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-6">
-          🏆 Premier Tournaments
+        <h2 className="text-gray-700 text-4xl sm:text-3xl mb-5 font-serif">
+        Compete at Every Level 
         </h2>
-        <p className="text-md sm:text-lg text-gray-700 max-w-3xl mx-auto mb-12">
-          Explore top-tier tournaments spanning local, national, and international levels. Elevate your game with the best.
-        </p>
+
+        <p className="max-w-3xl mx-auto text-base sm:text-lg text-gray-500 mb-12">
+        Compete in top-tier tournaments across local, national, and international levels. Rise to the challenge and showcase your skills!        </p>
 
         {/* Tournament Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ">

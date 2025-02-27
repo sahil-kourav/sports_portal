@@ -59,16 +59,16 @@ const Register = () => {
   }, [registerIsSuccess, registerData, registerError, navigate]);
 
   return (
-    <div className="flex items-center justify-center min-h-screen p-4">
+    <div className="flex items-center justify-center min-h-screen p-20">
       <Card className="w-full max-w-sm sm:max-w-md p-5 bg-white rounded-2xl shadow-lg">
         <CardHeader className="text-center">
-          <CardTitle className="text-3xl font-bold text-gray-800">Create an Account</CardTitle>
-          <CardDescription className="text-gray-600 mt-2">
+          <CardTitle className="text-3xl mb-2 text-gray-700">Create an Account</CardTitle>
+          <CardDescription className="text-gray-600">
             Join us today and explore the amazing features we have to offer!
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-col space-y-5">
+          <div className="flex flex-col space-y-6">
             <div>
               <Label htmlFor="name" className="text-gray-700">Full Name</Label>
               <Input
@@ -124,11 +124,11 @@ const Register = () => {
           <p className="text-center text-sm text-gray-500">
             Already have an account?{" "}
             <a href="/login" className="text-blue-600 hover:underline">
-              Log in
+              Login
             </a>
           </p>
           <p className="text-center text-xs text-gray-400 mt-4">
-            Powered by <span className="font-bold text-gray-700">Sports Portal</span>
+            Powered by <span className="font-bold text-gray-700">SportXpert</span>
           </p>
         </CardFooter>
       </Card>

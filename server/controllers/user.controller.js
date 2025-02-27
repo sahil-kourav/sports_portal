@@ -1,6 +1,7 @@
-const User = require('../models/user.model'); // Path check karle
+const User = require('../models/user.model');
 const bcrypt = require("bcryptjs");
 const { generateToken } = require("../utils/generateToken");
+const { deleteMediaFromCloudinary, uploadMedia } = require("../utils/cloudinary");
 
 const register = async (req, res) => {
     try {
@@ -8,7 +9,7 @@ const register = async (req, res) => {
         if (!name || !email || !password) {
             return res.status(400).json({
                 success: false,
-                message: "All fields are required."
+                message: "All fields are required." 
             });
         }
         const user = await User.findOne({ email });
@@ -70,43 +71,83 @@ const login = async (req, res) => {
     }
 };
 
-const logout = async (_, res) => {
+const logout = async (_,res) => {
     try {
-        return res
-            .status(200)
-            .cookie("token", "", {
-                httpOnly: true,
-                // secure: process.env.NODE_ENV === "production", // Use secure cookies in production
-                sameSite: "None", // Required for cross-site cookies
-                expires: new Date(0), // Proper way to expire the cookie
+        return res.status(200).cookie("token", "", {maxAge:0}).json({
+            message:"Logged out successfully.",
+            success:true
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success:false,
+            message:"Failed to logout"
+        }) 
+    }
+}
+
+const getUserProfile = async (req, res) => {
+    try {
+        const userId = req.id;
+        const user = await User.findById(userId).select("-password");
+        if(!user){
+            return res.status(404).json({
+                message:"Profile not found",
+                success: false
             })
-            .json({
-                success: true,
-                message: "Logged out successfully."
-            });
+        } 
+        return res.status(200).json({
+            success: true,
+            user
+        })
     } catch (error) {
         console.log(error);
         return res.status(500).json({
             success: false,
-            message: "Failed to logout"
+            message: "Failed to load user"
         });
     }
-};
+}
 
+const updateProfile = async (req,res) => {
+    try {
+        const userId = req.id;
+        const {name} = req.body;
+        const profilePhoto = req.file;
 
-// const logout = async (_, res) => {
-//     try {
-//         return res.status(200).cookie('token', '', { maxAge: 0 }).json({
-//             message: 'Logged out successfully.',
-//             success: true
-//         });
-//     } catch (error) {
-//         console.log(error);
-//         return res.status(500).json({
-//             success: false,
-//             message: 'Failed to logout'
-//         });
-//     }
-// };
+        const user = await User.findById(userId);
+        if(!user){
+            return res.status(404).json({
+                message:"User not found",
+                success:false
+            }) 
+        }
+        // extract public id of the old image from the url is it exists;
+        if(user.photoUrl){
+            const publicId = user.photoUrl.split("/").pop().split(".")[0]; // extract public id
+            deleteMediaFromCloudinary(publicId);
+        }
 
-module.exports = { register, login, logout }; // ✅ CommonJS export
+        // upload new photo
+        const cloudResponse = await uploadMedia(profilePhoto.path);
+        const photoUrl = cloudResponse.secure_url;
+
+        const updatedData = {name, photoUrl};
+        const updatedUser = await User.findByIdAndUpdate(userId, updatedData, {new:true}).select("-password");
+
+        return res.status(200).json({
+            success:true,
+            user:updatedUser,
+            message:"Profile updated successfully."
+        })
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success:false,
+            message:"Failed to update profile"
+        })
+    }
+}
+
+module.exports = { register, login, logout, getUserProfile, updateProfile };

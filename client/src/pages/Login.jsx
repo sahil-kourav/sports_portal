@@ -45,13 +45,13 @@ const Login = () => {
 <div className="flex items-center justify-center min-h-screen">
 <Card className="w-full max-w-md p-5 bg-white rounded-2xl shadow-lg ">
         <CardHeader className="text-center">
-          <CardTitle className="text-3xl mb-1 font-bold text-gray-800">Welcome Back!</CardTitle>
+          <CardTitle className="text-3xl mb-2 text-gray-700">Welcome Back!</CardTitle>
           <CardDescription className="text-gray-600 mt-2">
           We’re happy to see you again. Please log in to your account and continue where you left off.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-col space-y-6">
+          <div className="flex flex-col space-y-6 mt-2">
             <div>
               <Label htmlFor="email" className="text-gray-700">Email Address</Label>
               <Input
@@ -81,7 +81,7 @@ const Login = () => {
         <CardFooter className="flex flex-col space-y-4">
           <Button
             className="bg-blue-600 w-full hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md"
-            disabled={loginIsLoading}
+            disabled={loginIsLoading || !loginInput.email || !loginInput.password}
             onClick={handleLogin}
           >
             {loginIsLoading ? (
@@ -95,11 +95,11 @@ const Login = () => {
           <p className="text-center text-sm text-gray-500">
             Don’t have an account?{" "}
             <a href="/register" className="text-blue-600 hover:underline">
-            Register
+            Signup
             </a>
           </p>
           <p className="text-center text-xs text-gray-400 mt-4">
-            Powered by <span className="font-bold text-gray-700">Sports Portal</span>
+            Powered by <span className="font-bold text-gray-700">SportXpert</span>
           </p>
         </CardFooter>
       </Card>

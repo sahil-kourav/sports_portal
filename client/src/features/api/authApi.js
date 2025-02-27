@@ -1,7 +1,7 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { userLoggedIn } from "../authSlice";
+import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
+import { userLoggedIn, userLoggedOut } from "../authSlice";
 
-const USER_API = "http://localhost:8081/api/v1/user/"
+const USER_API = "http://localhost:8080/api/v1/user/"
 
 export const authApi = createApi({
     reducerPath:"authApi",
@@ -34,24 +34,47 @@ export const authApi = createApi({
         }),
         logoutUser: builder.mutation({
             query: () => ({
-                url: "logout",
-                method: "POST",
-                credentials: "include",
+              url: "logout",
+              method: "POST"
             }),
             async onQueryStarted(_, { queryFulfilled, dispatch }) {
+              try {
+                await queryFulfilled;
+                dispatch(userLoggedOut());
+              } catch (error) {
+                console.log(error);
+              }
+            }
+          }),
+          
+        loadUser: builder.query({
+            query: () => ({
+                url:"profile",
+                method:"GET"
+            }),
+            async onQueryStarted(_, {queryFulfilled, dispatch}) {
                 try {
-                    await queryFulfilled;
-                    dispatch(userLoggedOut()); // Clear Redux state
+                    const result = await queryFulfilled;
+                    dispatch(userLoggedIn({user:result.data.user}));
                 } catch (error) {
-                    console.log("Logout failed:", error);
+                    console.log(error);
                 }
             }
-        }),        
+        }),
+        updateUser: builder.mutation({
+            query: (formData) => ({
+                url:"profile/update",
+                method:"PUT",
+                body:formData,
+                credentials:"include"
+            })
+        })
     })
 });
-
 export const {
     useRegisterUserMutation,
     useLoginUserMutation,
-    useLogoutUserMutation 
+    useLogoutUserMutation,
+    useLoadUserQuery,
+    useUpdateUserMutation
 } = authApi;

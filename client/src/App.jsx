@@ -8,46 +8,59 @@ import { RouterProvider } from 'react-router';
 import Profile from './pages/users/profile';
 import Tournaments from './pages/users/Tournaments';
 import HeroSection from './pages/users/HeroSection';
+import Sidebar from "./pages/admin/Sidebar";
+import TournamentTable from './pages/admin/tournament/TournamentTable';
+import Dashboard from './pages/admin/Dashboard';
 
-  const appRouter = createBrowserRouter([
-    {
-      path: "/",
-      element: <MainLayout />,
-      children: [
-        {
-          path: "/",
-          element:
+const appRouter = createBrowserRouter([
+  {
+    path: "/",
+    element: <MainLayout />,
+    children: [
+      {
+        path: "/",
+        element:
           <>
-              <HeroSection />
-              <Tournaments />
-              {/* <Footer/> */}
-             {/* <TournamentFeatures/> */}
-              {/* <HeroSection /> */}
-              {/* <Courses /> */}
-              <Footer/>
+            <HeroSection />
+            <Tournaments />
+            <Footer />
           </>
-        },
-        {
-          path:"login",
-          element:<Login />
-        },
-        {
-          path:"register",
-          element:<Register />
-        },
-        {
-          path:"profile",
-          element:<Profile />
-        }
-      ],
-    },
-  ])
+      },
+      {
+        path: "login",
+        element: <Login />
+      },
+      {
+        path: "register",
+        element: <Register />
+      },
+      {
+        path: "profile",
+        element: <Profile />
+      },
+      {
+        path: "admin",
+        element: <Sidebar />,
+        children: [
+          {
+            path: "dashboard",
+            element: <Dashboard />
+          },
+          {
+            path: "tournament",
+            element: <TournamentTable />
+          },
+        ]
+      }
+    ],
+  },
+])
 
-  const App = () => {
-    return (
+const App = () => {
+  return (
     <>
       <main>
-        <RouterProvider router={appRouter}/>
+        <RouterProvider router={appRouter} />
       </main>
     </>
   )
