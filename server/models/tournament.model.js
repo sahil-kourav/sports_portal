@@ -1,7 +1,7 @@
-const mongoose = require ("mongoose");
+const mongoose = require("mongoose");
 
 const tournamentSchema = new mongoose.Schema({
-    title: {
+    tournamentTitle: {
         type: String,
         required: true
     },
@@ -11,15 +11,11 @@ const tournamentSchema = new mongoose.Schema({
     description: {
         type: String
     },
-    organizer: {
-        type: String,
-        required: true
-    },
-    createdBy: {
+
+    creator: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User", // Yeh User model ko refer karega
-        required: true
-    },    
+    },
     location: {
         type: String,
         required: true
@@ -30,23 +26,23 @@ const tournamentSchema = new mongoose.Schema({
     },
     registrationDeadline: {
         type: Date,
-        required: true
+
     },
     prizePool: {
         type: Number,
-        required: true
+
     },
-    entryFee: {
+    tournamentPrice: {
         type: Number,
-        required: true
+
     },
     tournamentThumbnail: {
         type: String
     },
 
-    tournamentType: {
-        type: String, 
-        enum: ["Cricket", "Football", "Basketball", "Hockey", "Tennis", "Other"],
+    category: {
+        type: String,
+        enum: ["Cricket", "Football", "Basketball", "Tennis", "Badminton", "Hockey", "Volleyball", "Kabaddi", "Table Tennis", "Swimming", "Athletics", "Chess"],
         required: true
     },
     maxTeams: {
@@ -66,31 +62,31 @@ const tournamentSchema = new mongoose.Schema({
     },
 
     contactInfo: {
-        email: { type: String, required: true },
-        phone: { type: String, required: true }
+        email: { type: String },
+        phone: { type: String }
     },
     matchSchedule: [
         {
-            matchDate: { type: Date, required: true },
-            teamA: { type: String, required: true },
-            teamB: { type: String, required: true },
-            time: { type: String, required: true }
+            matchDate: { type: Date },
+            teamA: { type: String },
+            teamB: { type: String },
+            time: { type: String }
         }
     ],
     rules: {
         type: String // Detailed tournament rules
     },
-    participants: [
+    enrolledUsers: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User"
         }
     ],
-    isPublished:{
-        type:Boolean,
-        default:false
+    isPublished: {
+        type: Boolean,
+        default: false
     },
-    
+
     createdAt: {
         type: Date,
         default: Date.now

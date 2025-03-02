@@ -32,21 +32,23 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-        await logoutUser();
-  }
+    await logoutUser().unwrap();
+  };
+  
 
   useEffect(() => {
     if (isSuccess) {
       toast.success(data?.message || "User log out.");
       navigate("/login");
     }
-  }, [isSuccess]);
+  }, [isSuccess, data, navigate]);
+  
 
 
   return (
     <div className="h-20 dark:bg-[#020817] bg-white border-b dark:border-b-gray-800 border-b-gray-200 fixed top-0 left-0 right-0 duration-300 z-10">
       {/* Desktop */}
-      <div className="max-w-7xl mx-auto hidden md:flex justify-between items-center gap-10 h-full">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 hidden md:flex justify-between items-center gap-10 h-full">
         <div className="flex items-center gap-2">
           <Users size={"30"} />
           <h1 className="hidden md:block font-semibold text-2xl">SportXpert</h1>
@@ -63,27 +65,35 @@ const Navbar = () => {
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
+
                 <Avatar>
                   <AvatarImage src={user?.photoUrl || "https://static.vecteezy.com/system/resources/previews/036/280/650/non_2x/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-illustration-vector.jpg"} alt={user.name || "User"} />
                   <AvatarFallback>{user?.name?.charAt(0) || "U"}</AvatarFallback>
                 </Avatar>
+
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56 mr-5">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                  <DropdownMenuItem><Link to="profile">Edit Profile</Link></DropdownMenuItem>
+                  <DropdownMenuItem><Link to="/profile">Edit Profile</Link></DropdownMenuItem>
+                  {user?.role !== "admin" && (
+                    <DropdownMenuItem>
+                      <Link to="/my-tournaments">My Tournaments</Link>
+                    </DropdownMenuItem>
+                  )}
+
+                  {user?.role === "admin" && (
+                    <>
+                      <DropdownMenuItem><Link to="/admin/tournament" className="dark:text-white hover:text-gray-500 rounded-md">Tournaments</Link></DropdownMenuItem>
+                      <DropdownMenuItem><Link to="/admin/dashboard">Dashboard</Link></DropdownMenuItem>
+                    </>
+                  )}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem className="text-red-500 hover:bg-red-100 cursor-pointer" onClick={handleLogout}>
                     Logout
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
-                {user?.role === "admin" && (
-                  <>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem><Link to="/admin/dashboard">Dashboard</Link></DropdownMenuItem>
-                  </>
-                )}
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
@@ -117,8 +127,8 @@ const MobileNavbar = ({ user, handleLogout }) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button size="icon" className="rounded-full hover:bg-gray-200 pr-4" variant="outline">
-          <Menu />
+        <Button size="icon" className="rounded-full hover:bg-gray-200" variant="outline">
+          <Menu size={24} />
         </Button>
       </SheetTrigger>
       <SheetContent className="flex flex-col">
@@ -126,7 +136,6 @@ const MobileNavbar = ({ user, handleLogout }) => {
           <SheetTitle><Link to="/">SportXpert</Link></SheetTitle>
         </SheetHeader>
         <Separator className="mr-2" />
-
 
         <nav className="flex flex-col space-y-1">
           <SheetClose asChild>
@@ -145,11 +154,40 @@ const MobileNavbar = ({ user, handleLogout }) => {
             <Link to="/services" className="dark:text-white hover:text-gray-500 px-3 py-2 rounded-md">Services</Link>
           </SheetClose>
 
-          {/* Show Edit Profile only when user is logged in */}
+          {/* Show My Tournaments only for normal users (not admins) */}
+          {user && user?.role !== "admin" && (
+            <SheetClose asChild>
+              <Link to="/my-tournaments" className="dark:text-white hover:text-gray-500 px-3 py-2 rounded-md">
+                My Tournaments
+              </Link>
+            </SheetClose>
+          )}
+
+          {/* Show Profile only when user is logged in */}
           {user && (
             <SheetClose asChild>
-              <Link to="/profile" className="dark:text-white hover:text-gray-500 px-3 py-2 rounded-md">Edit Profile</Link>
+              <Link to="/profile" className="dark:text-white hover:text-gray-500 px-3 py-2 rounded-md">
+                Edit Profile
+              </Link>
             </SheetClose>
+          )}
+
+          {/* Show Admin Dashboard only for Admins */}
+          {user?.role === "admin" && (
+            <>
+              <SheetClose asChild>
+                <Link to="/admin/tournament" className="dark:text-white hover:text-gray-500 px-3 py-2 rounded-md">
+                  Tournaments
+                </Link>
+              </SheetClose>
+              <SheetFooter>
+                <SheetClose asChild>
+                  <Link to="/admin/dashboard" className="dark:text-white hover:text-gray-500 px-3 py-2 rounded-md">
+                    Dashboard
+                  </Link>
+                </SheetClose>
+              </SheetFooter>
+            </>
           )}
 
           {/* Login / Logout Handling */}
@@ -173,15 +211,6 @@ const MobileNavbar = ({ user, handleLogout }) => {
             </div>
           )}
         </nav>
-
-        {/* Show Dashboard button only for instructors */}
-        {user?.role === "admin" && (
-          <SheetFooter>
-            <SheetClose asChild>
-              <Button className="w-full" type="submit" onClick={() => navigate("/admin/dashboard")}>Dashboard</Button>
-            </SheetClose>
-          </SheetFooter>
-        )}
       </SheetContent>
     </Sheet>
   );

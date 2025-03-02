@@ -5,22 +5,21 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 
 const Dashboard = () => {
 
-//   const {data, isSuccess, isError, isLoading} = useGetPurchasedCoursesQuery();
+  //  const {data, isSuccess, isError, isLoading} = useGetPurchasedCoursesQuery();
 
-//   if(isLoading) return <h1>Loading...</h1>
-//   if(isError) return <h1 className="text-red-500">Failed to get purchased course</h1>
+  //  if(isLoading) return <h1>Loading...</h1>
+  //  if(isError) return <h1 className="text-red-500">Failed to get purchased course</h1>
 
-  //
-//   const {purchasedCourse} = data || [];
+  // const {purchasedCourse} = data || [];
 
-//   const courseData = purchasedCourse.map((course)=> ({
-//     name:course.courseId.courseTitle,
-//     price:course.courseId.coursePrice
-//   }))
+  //  const courseData = purchasedCourse.map((course)=> ({
+  //    name:course.courseId.courseTitle,
+  //    price:course.courseId.coursePrice
+  //  }))
 
-//   const totalRevenue = purchasedCourse.reduce((acc,element) => acc+(element.amount || 0), 0);
+  //  const totalRevenue = purchasedCourse.reduce((acc,element) => acc+(element.amount || 0), 0);
 
-//   const totalSales = purchasedCourse.length;
+  //  const totalSales = purchasedCourse.length;
   return (
     <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ">
       <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">

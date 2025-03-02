@@ -11,6 +11,7 @@ import HeroSection from './pages/users/HeroSection';
 import Sidebar from "./pages/admin/Sidebar";
 import TournamentTable from './pages/admin/tournament/TournamentTable';
 import Dashboard from './pages/admin/Dashboard';
+import CreateTournament from './pages/admin/tournament/CreateTournament';
 
 const appRouter = createBrowserRouter([
   {
@@ -50,6 +51,10 @@ const appRouter = createBrowserRouter([
             path: "tournament",
             element: <TournamentTable />
           },
+          {
+            path: "tournament/create",
+            element: <CreateTournament />
+          }
         ]
       }
     ],
