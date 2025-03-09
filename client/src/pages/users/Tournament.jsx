@@ -1,113 +1,47 @@
-// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-// import { Badge } from "@/components/ui/badge";
-// import { Card, CardContent } from "@/components/ui/card";
-// import React from "react";
-
-// const Tournament = () => {
-//   return (
-//     <div className="mb-6 px-4">
-//       <Card className="overflow-hidden rounded-xl shadow-lg dark:bg-gray-800 bg-white transform hover:scale-105 transition-all duration-300 w-400px max-w-[350px] mx-auto">
-//         <div className="relative">
-//           <img
-//             src="https://t4.ftcdn.net/jpg/04/28/40/41/360_F_428404142_xeY0I0sgtOWawFv7eLzZMaviRU3eGNv4.jpg"
-//             alt="tournament"
-//             className="w-full h-48 object-cover rounded-t-xl cursor-pointer"
-//           />
-//         </div>
-
-//         <CardContent className="px-6 py-5 space-y-4">
-//           <h1 className="hover:underline font-bold text-xl text-left truncate cursor-pointer">
-//             Tata IPL 2025
-//           </h1>
-//           <div className="flex items-center justify-between">
-//             <div className="flex items-center gap-3">
-//               <Avatar className="h-10 w-10 cursor-pointer">
-//                 <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-//                 <AvatarFallback>CN</AvatarFallback>
-//               </Avatar>
-//               <h1 className="font-medium text-md cursor-pointer">Indore</h1>
-//             </div>
-//             <Badge className={'bg-blue-600 text-white px-3 py-1 text-sm rounded-full cursor-pointer'}>
-//               Paid
-//             </Badge>
-//           </div>
-
-//           <div className="text-lg font-bold text-left text-gray-900">
-//             <span>₹0.0</span>
-//           </div>
-//         </CardContent>
-//       </Card>
-//     </div>
-//   );
-// };
-
-// export default Tournament;
-
-
-
-
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { Calendar, Clock, Trophy, MapPin } from "lucide-react";
 import React from "react";
+import { Link } from "react-router-dom";
 
-const Tournament = () => {
+const Tournament = ({ tournament }) => {
   return (
-    <div className="mb-6 px-4">
-      <Card className="overflow-hidden rounded-xl shadow-lg dark:bg-gray-800 bg-white transform hover:scale-105 transition-all duration-300 w-400px max-w-[350px] mx-auto">
-        <div className="relative">
-          <img
-            src="https://t4.ftcdn.net/jpg/04/28/40/41/360_F_428404142_xeY0I0sgtOWawFv7eLzZMaviRU3eGNv4.jpg"
-            alt="tournament"
-            className="w-full h-48 object-cover rounded-t-xl cursor-pointer"
-          />
+    <Link
+      to={`/tournament-detail/${tournament._id}`}
+      className="border border-gray-300 rounded-lg overflow-hidden transition-transform duration-200 hover:scale-[1.02] shadow-sm"
+    >
+      {/* Tournament Image */}
+      <img
+        src={tournament.tournamentThumbnail|| "NA"}
+        alt="tournament"
+        className="w-full h-36 object-cover rounded-t-lg"
+      />
+       <Badge className={`absolute top-3 left-3 px-3 py-1 text-sm ${tournament.isPublished ? "bg-gray-600 text-white" : "bg-gray-400 text-white"}`}>
+             {tournament.isPublished ? "Live" : "Draft" || "NA"}
+           </Badge>
+
+      {/* Tournament Info */}
+      <div className="p-3 mb-2 text-left">
+        <h3 className="text-base font-semibold max-w-[95%] truncate">
+          {tournament.tournamentTitle || "NA"}
+        </h3>
+        <p className="text-sm text-gray-500 truncate">{tournament.subTitle || "NA"}</p>
+
+        {/* Creator Info */}
+        <div className="flex items-center gap-3 mt-3 mb-3">
+          <Avatar className="h-10 w-10">
+            <AvatarImage
+              src={tournament.creator?.photoUrl || "https://static.vecteezy.com/system/resources/previews/036/280/650/non_2x/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-illustration-vector.jpg"}
+              alt="creator"
+            />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+          <p className="text-sm font-medium">{tournament.creator?.name || "NA"}</p>
         </div>
-        <CardContent className="px-6 py-5 space-y-4">
-          <h1 className="hover:underline font-bold text-xl text-left truncate cursor-pointer">
-            Tata IPL 2025
-          </h1>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Avatar className="h-10 w-10 cursor-pointer">
-                <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
-              <div>
-                <h2 className="font-medium text-md cursor-pointer">Sahil Kourav</h2>
-              </div>
-            </div>
-          </div>
-          <div className="text-gray-700 dark:text-gray-300 space-y-2">
-            <div className="flex items-center gap-2">
-              <MapPin className="h-5 w-5 text-gray-500" />
-              <span className="text-sm">Indore Stadium</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Calendar className="h-5 w-5 text-gray-500" />
-              <span className="text-sm">Date: March 15, 2025</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Calendar className="h-5 w-5 text-gray-500" />
-              <span className="text-sm">Reg. Deadline: March 10, 2025</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Trophy className="h-5 w-5 text-gray-500" />
-              <span className="text-sm">Prize Pool: ₹10,00,000</span>
-            </div>
-          </div>
-          <div className="flex items-center justify-between">
-            <div className="text-lg font-bold text-left text-gray-900">
-              <span>₹500 </span>
-            </div>
-            <button className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded">
-              Register Now
-            </button>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+          <p className="text-lg font-bold text-gray-900 dark:text-white">
+              ₹{tournament.registrationFee || "NA"}
+            </p>
+      </div>
+    </Link>
   );
 };
 
@@ -124,125 +58,56 @@ export default Tournament;
 
 
 
-// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-// import { Badge } from "@/components/ui/badge";
-// import { Card, CardContent } from "@/components/ui/card";
-// import { Calendar, Clock, Trophy, MapPin } from "lucide-react";
-// import React from "react";
 
-// const Tournament = () => {
-//   return (
-//     <div className="mb-6 px-4">
-//       <Card className="overflow-hidden rounded-xl shadow-lg dark:bg-gray-800 bg-white transform hover:scale-105 transition-all duration-300 w-400px max-w-[350px] mx-auto">
-//         <div className="relative">
-//           <img
-//             src="https://t4.ftcdn.net/jpg/04/28/40/41/360_F_428404142_xeY0I0sgtOWawFv7eLzZMaviRU3eGNv4.jpg"
-//             alt="tournament"
-//             className="w-full h-48 object-cover rounded-t-xl cursor-pointer"
-//           />
-//         </div>
-//         <CardContent className="px-6 py-5 space-y-4">
-//           <h1 className="hover:underline font-bold text-xl text-left truncate cursor-pointer">
-//             Tata IPL 2025
-//           </h1>
-//           <div className="flex items-center justify-between">
-//             <div className="flex items-center gap-3">
-//               <Avatar className="h-10 w-10 cursor-pointer">
-//                 <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-//                 <AvatarFallback>CN</AvatarFallback>
-//               </Avatar>
-//               <div>
-//                 <h2 className="font-medium text-md cursor-pointer">Sahil Kourav</h2>
-//               </div>
-//             </div>
-//           </div>
-//           <div className="text-gray-700 dark:text-gray-300 space-y-2">
-//             <div className="flex items-center gap-2">
-//               <MapPin className="h-5 w-5 text-gray-500" />
-//               <span className="text-sm">Indore Stadium</span>
-//             </div>
-//             <div className="flex items-center gap-2">
-//               <Calendar className="h-5 w-5 text-gray-500" />
-//               <span className="text-sm">Date: March 15, 2025</span>
-//             </div>
-//             <div className="flex items-center gap-2">
-//               <Calendar className="h-5 w-5 text-gray-500" />
-//               <span className="text-sm">Reg. Deadline: March 10, 2025</span>
-//             </div>
-//             <div className="flex items-center gap-2">
-//               <Trophy className="h-5 w-5 text-gray-500" />
-//               <span className="text-sm">Prize Pool: ₹10,00,000</span>
-//             </div>
-//           </div>
-//           <div className="flex items-center justify-between">
-//             <div className="text-lg font-bold text-left text-gray-900">
-//               <span>₹500 </span>
-//             </div>
-//             <button className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded">
-//               Register Now
-//             </button>
-//           </div>
-//         </CardContent>
-//       </Card>
-//     </div>
-//   );
-// };
 
-// export default Tournament;
+
+
+
+{/* <div className="mb-6 px-2">
+      <Card className="overflow-hidden rounded-2xl shadow-lg dark:bg-gray-900 bg-white w-full max-w-sm mx-auto transition-transform hover:scale-105 duration-300">
+        <div className="relative">
+          <img
+            src={tournament.tournamentThumbnail}
+            alt="tournament"
+            className="w-full h-40 object-cover rounded-t-2xl"
+          />
+          <Badge className={`absolute top-3 left-3 px-3 py-1 text-sm ${tournament.isPublished ? "bg-green-600 text-white" : "bg-gray-400 text-white"}`}>
+            {tournament.isPublished ? "Live" : "Draft"}
+          </Badge>
+        </div>
+        <CardContent className="px-4 py-3 space-y-2">
+          <h1 className="font-bold text-xl truncate text-gray-900 dark:text-white">
+            {tournament.tournamentTitle}
+          </h1>
+            <div className="flex items-center gap-2 truncate">
+              <span>{tournament.subTitle}</span>
+            </div>
+          
+          <div className="flex items-center gap-3">
+            <Avatar className="h-10 w-10">
+              <AvatarImage src={tournament.creator?.photoUrl || "https://github.com/shadcn.png"} alt="creator" />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+            <div>
+              <h2 className="font-medium text-gray-800 dark:text-gray-300 text-sm flex items-center gap-1">
+                {tournament.creator?.name || "NA"}
+              </h2>
+            </div>
+          </div>
+          
+          <div className="flex items-center justify-between">
+            <div className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-1">
+              ₹{tournament.registrationFee}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </div> */}
 
 
 
 
 
 
-
-
-
-
-
-
-// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-// import { Badge } from "@/components/ui/badge";
-// import { Card, CardContent } from "@/components/ui/card";
-// import React from "react";
-// import { Link } from "react-router-dom";
-
-// const Tournament = ({tournament}) => {
-//   return (
-//     <Link to={`/tournament-detail/${tournament._id}`}>
-//     <Card className="overflow-hidden rounded-lg dark:bg-gray-800 bg-white shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
-//       <div className="relative">
-//         <img
-//           src={tournament.tournamentThumbnail}
-//           alt="tournament"
-//           className="w-full h-36 object-cover rounded-t-lg"
-//         />
-//       </div>
-//       <CardContent className="px-5 py-4 space-y-3">
-//         <h1 className="hover:underline font-bold text-lg truncate">
-//           {tournament.tournamentTitle}
-//         </h1>
-//         <div className="flex items-center justify-between">
-//           <div className="flex items-center gap-3">
-//             <Avatar className="h-8 w-8">
-//               <AvatarImage src={tournament.creator?.photoUrl || "https://github.com/shadcn.png"} alt="@shadcn" />
-//               <AvatarFallback>CN</AvatarFallback>
-//             </Avatar>
-//             <h1 className="font-medium text-sm">{tournament.creator?.name}</h1>
-//           </div>
-//           {/* <Badge className={'bg-blue-600 text-white px-2 py-1 text-xs rounded-full'}>
-//             {tournament.tournamentLevel}
-//           </Badge> */}
-//         </div>
-//         <div className="text-lg font-bold">
-//             <span>₹{tournament.tournamentPrice}</span>
-//         </div>
-//       </CardContent>
-//     </Card>
-//     </Link>
-//   );
-// };
-
-// export default Tournament;
 
 

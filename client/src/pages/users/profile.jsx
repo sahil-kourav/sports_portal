@@ -80,7 +80,7 @@ const Profile = () => {
           <Avatar className="h-24 w-24 md:h-32 md:w-32 mb-4">
             <AvatarImage
               src={user?.photoUrl || "https://static.vecteezy.com/system/resources/previews/036/280/650/non_2x/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-illustration-vector.jpg"}
-              alt="@shadcn"
+              alt="@user"
             />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>

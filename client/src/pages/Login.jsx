@@ -42,12 +42,12 @@ const Login = () => {
   }, [loginIsSuccess, loginData, loginError, navigate]);
 
   return (
-<div className="flex items-center justify-center min-h-screen">
-<Card className="w-full max-w-md p-5 bg-white rounded-2xl shadow-lg ">
+    <div className="flex items-center justify-center min-h-screen">
+      <Card className="w-full max-w-md p-2 bg-white rounded-2xl shadow-xs ">
         <CardHeader className="text-center">
           <CardTitle className="text-3xl mb-2 text-gray-700">Welcome Back!</CardTitle>
-          <CardDescription className="text-gray-600 mt-2">
-          We’re happy to see you again. Please log in to your account and continue where you left off.
+          <CardDescription className="text-gray-600">
+            We’re happy to see you again. Please log in to your account and continue where you left off.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -62,7 +62,7 @@ const Login = () => {
                 onChange={handleInputChange}
                 placeholder="Enter your email"
                 className="mt-1 w-full bg-gray-100 focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                />
+              />
             </div>
             <div>
               <Label htmlFor="password" className="text-gray-700">Password</Label>
@@ -95,7 +95,7 @@ const Login = () => {
           <p className="text-center text-sm text-gray-500">
             Don’t have an account?{" "}
             <a href="/register" className="text-blue-600 hover:underline">
-            Signup
+              Signup
             </a>
           </p>
           <p className="text-center text-xs text-gray-400 mt-4">

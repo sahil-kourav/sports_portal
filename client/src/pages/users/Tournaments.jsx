@@ -1,28 +1,35 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import React from "react";
 import Tournament from "./Tournament";
-
-const listOfTournaments = [1, 2, 3, 4,5,6];
+import { useGetPublishedTournamentQuery } from "@/features/api/tournamentApi";
 
 const Tournaments = () => {
-  const isLoading = false;
+  const {data, isLoading, isSuccess, isError} = useGetPublishedTournamentQuery();
+console.log(data);
+  if(isError) return <h1>Some error occurred while fetching tournaments.</h1>
+
 
   return (
     <section className="bg-gradient-to-b from-white to-gray-50 min-h-screen py-16 px-4 sm:px-8">
-      <div className="max-w-7xl mx-auto text-center">
-        <h2 className="text-gray-700 text-4xl sm:text-3xl mb-5 font-serif">
+      <div className="max-w-6xl mx-auto text-center">
+        <h2 className="text-gray-700 text-4xl sm:text-3xl mb-8 font-serif">
         Compete at Every Level 
         </h2>
 
-        <p className="max-w-3xl mx-auto text-base sm:text-lg text-gray-500 mb-12">
-        Compete in top-tier tournaments across local, national, and international levels. Rise to the challenge and showcase your skills!        </p>
+        <p className="max-w-4xl mx-auto text-base sm:text-lg text-gray-500 mb-16">
+        Compete in top-tier tournaments across local, national, and international levels. Rise to the challenge and showcase your skills!     
+           </p>
 
         {/* Tournament Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ">
-          {isLoading
-            ? Array.from({ length: 8 }).map((_, index) => <TournamentSkeleton key={index} />)
-            : listOfTournaments.map((tournament, index) => <Tournament key={index} />)}
-        </div>
+             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+           {isLoading ? (
+             Array.from({ length: 8 }).map((_, index) => (
+               <TournamentSkeleton key={index} />
+             ))
+           ) : (
+            data?.tournaments && data.tournaments.map((tournament, index) => <Tournament key={index} tournament={tournament}/>) 
+           )}
+         </div>
       </div>
     </section>
   );

@@ -14,10 +14,11 @@ export const tournamentApi = createApi({
       query: ({ tournamentTitle, category }) => ({
         url: "",
         method: "POST",
-        body: { tournamentTitle, category },
+        body: { tournamentTitle, category},
       }),
       invalidatesTags: ["Refetch_Creator_Tournament"],
     }),
+
     getSearchTournament:builder.query({
       query: ({searchQuery, categories, sortByPrice}) => {
         // Build qiery string
@@ -40,12 +41,14 @@ export const tournamentApi = createApi({
         }
       }
     }),
+
     getPublishedTournament: builder.query({
       query: () => ({
         url: "/published-tournaments",
         method: "GET",
       }),
     }),
+
     getCreatorTournament: builder.query({
       query: () => ({
         url: "",
@@ -53,14 +56,25 @@ export const tournamentApi = createApi({
       }),
       providesTags: ["Refetch_Creator_Tournament"],
     }),
+
     editTournament: builder.mutation({
       query: ({ formData, tournamentId }) => ({
-        url: `/${tournamentId}`,
+        url: `${tournamentId}`,
         method: "PUT",
         body: formData,
       }),
       invalidatesTags: ["Refetch_Creator_Tournament"],
     }),
+
+    deleteTournament: builder.mutation({
+      query: (tournamentId) => ({
+        url: `/${tournamentId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Refetch_Creator_Tournament"], // Refetch updated data
+    }),
+    
+
     getTournamentById: builder.query({
       query: (tournamentId) => ({
         url: `/${tournamentId}`,
@@ -76,12 +90,14 @@ export const tournamentApi = createApi({
     }),
   }),
 });
+
 export const {
   useCreateTournamentMutation,
   useGetSearchTournamentQuery,
   useGetPublishedTournamentQuery,
   useGetCreatorTournamentQuery,
   useEditTournamentMutation,
+  useDeleteTournamentMutation,
   useGetTournamentByIdQuery,
   usePublishTournamentMutation,
 } = tournamentApi;

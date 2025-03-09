@@ -10,9 +10,6 @@ const EditTournament = () => {
         <h1 className="font-bold text-xl">
           Add detail information regarding Tournament
         </h1>
-        {/* <Link to="lecture"> */}
-          <Button className="hover:text-blue-600" variant="link">Go to lectures page</Button>
-        {/* </Link> */}
       </div>
       <TournamentTab/>
     </div>

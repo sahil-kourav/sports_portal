@@ -34,7 +34,7 @@ const Navbar = () => {
   const handleLogout = async () => {
     await logoutUser().unwrap();
   };
-  
+
 
   useEffect(() => {
     if (isSuccess) {
@@ -42,25 +42,23 @@ const Navbar = () => {
       navigate("/login");
     }
   }, [isSuccess, data, navigate]);
-  
-
 
   return (
     <div className="h-20 dark:bg-[#020817] bg-white border-b dark:border-b-gray-800 border-b-gray-200 fixed top-0 left-0 right-0 duration-300 z-10">
       {/* Desktop */}
       <div className="max-w-7xl mx-auto px-4 md:px-8 hidden md:flex justify-between items-center gap-10 h-full">
         <div className="flex items-center gap-2">
-          <Users size={"30"} />
-          <h1 className="hidden md:block font-semibold text-2xl">SportXpert</h1>
+            <Users size={"30"} />
+          <Link to="/">
+            <h1 className="hidden md:block font-semibold text-2xl">SportXpert</h1>
+          </Link>
         </div>
-        {/* <div className="flex gap-6 item-end"> */}
-        <div className="flex ml-auto gap-6 items-center">
+        {/* <div className="flex ml-auto gap-6 items-center">
           <Link to="/" className="dark:text-white hover:text-gray-500 px-3 py-2 rounded-md">Home</Link>
           <Link to="/about-us" className="dark:text-white hover:text-gray-500  px-3 py-2 rounded-md">About Us</Link>
           <Link to="/contact-us" className="dark:text-white hover:text-gray-500 px-3 py-2 rounded-md">Contact Us</Link>
           <Link to="/services" className="dark:text-white hover:text-gray-500 px-3 py-2 rounded-md">Services</Link>
-        </div>
-        {/* User icons and dark mode icon */}
+        </div> */}
         <div className="flex items-center gap-6">
           {user ? (
             <DropdownMenu>
@@ -113,7 +111,9 @@ const Navbar = () => {
 
       {/* Mobile device */}
       <div className="flex md:hidden items-center justify-between px-4 h-full">
-        <h1 className="font-semibold text-2xl">SportXpert</h1>
+        <Link to="/">
+          <h1 className="font-semibold text-2xl">SportXpert</h1>
+        </Link>
         <MobileNavbar user={user} handleLogout={handleLogout} />
       </div>
     </div >
@@ -142,7 +142,7 @@ const MobileNavbar = ({ user, handleLogout }) => {
             <Link to="/" className="dark:text-white hover:text-gray-500 px-3 py-2 rounded-md">Home</Link>
           </SheetClose>
 
-          <SheetClose asChild>
+          {/* <SheetClose asChild>
             <Link to="/about" className="dark:text-white hover:text-gray-500 px-3 py-2 rounded-md">About</Link>
           </SheetClose>
 
@@ -152,7 +152,7 @@ const MobileNavbar = ({ user, handleLogout }) => {
 
           <SheetClose asChild>
             <Link to="/services" className="dark:text-white hover:text-gray-500 px-3 py-2 rounded-md">Services</Link>
-          </SheetClose>
+          </SheetClose> */}
 
           {/* Show My Tournaments only for normal users (not admins) */}
           {user && user?.role !== "admin" && (

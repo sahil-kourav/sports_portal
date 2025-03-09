@@ -5,56 +5,42 @@ const tournamentSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    subTitle: {
-        type: String
-    },
-    description: {
-        type: String
-    },
+    subTitle: { type: String },
+    description: { type: String },
+
+    location: { type: String },
+
 
     creator: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User", // Yeh User model ko refer karega
-    },
-    location: {
-        type: String,
+        ref: "User",
         required: true
     },
-    date: {
-        type: Date,
-        required: true
-    },
-    registrationDeadline: {
-        type: Date,
 
-    },
-    prizePool: {
-        type: Number,
+    registrationDeadline: { type: Date },
+    registrationFee: { type: Number, default: 0 },
 
-    },
-    tournamentPrice: {
-        type: Number,
+    prizePoolFirst: { type: Number, default: 0 },
+    prizePoolSecond: { type: Number, default: 0 },
+    prizePoolThird: { type: Number, default: 0 },
 
-    },
     tournamentThumbnail: {
-        type: String
+        type: String,
+        default: "default-thumbnail.jpg"
     },
 
     category: {
         type: String,
-        enum: ["Cricket", "Football", "Basketball", "Tennis", "Badminton", "Hockey", "Volleyball", "Kabaddi", "Table Tennis", "Swimming", "Athletics", "Chess"],
+        enum: [
+                "Cricket", "Football", "Basketball", "Tennis", "Badminton", 
+                "Hockey", "Volleyball", "Kabaddi", "Kho Kho",
+                "Kushti", "Archery", "Wrestling", "Online Gaming", "Other"
+              ],
         required: true
     },
-    maxTeams: {
-        type: Number
-    },
-    teamSize: {
-        type: Number
-    },
-    matchFormat: {
-        type: String,
-        enum: ["T20", "One-Day", "Test", "Knockout", "Round-Robin", "Other"],
-    },
+
+    maxTeams: { type: Number, default: 30 },
+
     status: {
         type: String,
         enum: ["Upcoming", "Ongoing", "Completed"],
@@ -62,35 +48,25 @@ const tournamentSchema = new mongoose.Schema({
     },
 
     contactInfo: {
-        email: { type: String },
-        phone: { type: String }
+        phone: { type: String },
     },
-    matchSchedule: [
-        {
-            matchDate: { type: Date },
-            teamA: { type: String },
-            teamB: { type: String },
-            time: { type: String }
-        }
-    ],
-    rules: {
-        type: String // Detailed tournament rules
-    },
+
     enrolledUsers: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User"
         }
     ],
+
+    createdAt: {
+        type: String,
+    },
+
     isPublished: {
         type: Boolean,
         default: false
-    },
-
-    createdAt: {
-        type: Date,
-        default: Date.now
     }
+
 }, { timestamps: true });
 
 const Tournament = mongoose.model("Tournament", tournamentSchema);
