@@ -20,10 +20,6 @@ const tournamentSchema = new mongoose.Schema({
     registrationDeadline: { type: Date },
     registrationFee: { type: Number, default: 0 },
 
-    prizePoolFirst: { type: Number, default: 0 },
-    prizePoolSecond: { type: Number, default: 0 },
-    prizePoolThird: { type: Number, default: 0 },
-
     tournamentThumbnail: {
         type: String,
         default: "default-thumbnail.jpg"
@@ -39,16 +35,12 @@ const tournamentSchema = new mongoose.Schema({
         required: true
     },
 
-    maxTeams: { type: Number, default: 30 },
+    maxTeams: { type: Number, default: 20 },
 
     status: {
         type: String,
         enum: ["Upcoming", "Ongoing", "Completed"],
         default: "Upcoming"
-    },
-
-    contactInfo: {
-        phone: { type: String },
     },
 
     enrolledUsers: [

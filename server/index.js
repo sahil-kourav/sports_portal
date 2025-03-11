@@ -5,7 +5,6 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const userRoute = require("./routes/user.route");
 const tournamentRoute = require("./routes/tournament.route");
-const purchaseRoute = require("./routes/purchaseTournament.route");
 
 dotenv.config({});
 // call database connection here 
@@ -26,7 +25,6 @@ app.use(cors({
 //apis
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/tournament", tournamentRoute);
-app.use("/api/v1/purchase", purchaseRoute);
 
 app.listen(PORT, () => {
     console.log(`Server listen at port ${PORT}`);

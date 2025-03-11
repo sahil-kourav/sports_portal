@@ -90,6 +90,7 @@ const getUserProfile = async (req, res) => {
     try {
         const userId = req.id;
         const user = await User.findById(userId).select("-password");
+        console.log("User ID from Request:", req.user);
         if(!user){
             return res.status(404).json({
                 message:"Profile not found",

@@ -19,30 +19,18 @@ const userSchema = new mongoose.Schema({
         required: true
     },
 
-    phone: {
-        type: String,
-        unique: true,
-        sparse: true 
-    },
-
     gender: {
         type: String,
         enum: ["male", "female", "other"],
         default: "other"
     },
     
-    dob: {
-        type: Date
-    },
     role: {
         type: String,
         enum: ["admin", "user"],
         default: "user"
     },
-    sportsInterest: {
-        type: [String], 
-        default: []
-    },
+
     enrolledTournaments: [
         {
             type: mongoose.Schema.Types.ObjectId,

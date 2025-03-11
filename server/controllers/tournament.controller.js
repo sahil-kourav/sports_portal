@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const User = require("../models/user.model"); 
 const Tournament = require("../models/tournament.model");
 
 const { deleteMediaFromCloudinary, uploadMedia } = require("../utils/cloudinary");
@@ -34,45 +35,6 @@ const createTournament = async (req, res) => {
     }
 };
 
-const searchTournament = async (req, res) => {
-    try {
-        const { query = "", categories = [], sortByPrice = "" } = req.query;
-        console.log(categories);
-
-        // create search query
-        const searchCriteria = {
-            isPublished: true,
-            $or: [
-                { tournamentTitle: { $regex: query, $options: "i" } },
-                { subTitle: { $regex: query, $options: "i" } },
-                { category: { $regex: query, $options: "i" } },
-            ]
-        }
-
-        // if categories selected
-        if (categories.length > 0) {
-            searchCriteria.category = { $in: categories };
-        }
-
-        // define sorting order
-        const sortOptions = {};
-        if (sortByPrice === "low") {
-            sortOptions.tournamentPrice = 1;//sort by price in ascending
-        } else if (sortByPrice === "high") {
-            sortOptions.tournamentPrice = -1; // descending
-        }
-
-        let tournaments = await Tournament.find(searchCriteria).populate({ path: "creator", select: "name photoUrl" }).sort(sortOptions);
-
-        return res.status(200).json({
-            success: true,
-            tournaments: tournaments || []
-        });
-
-    } catch (error) {
-        console.log(error);
-    }
-}
 
 const getPublishedTournament = async (_, res) => {
     try {
@@ -116,7 +78,7 @@ const getCreatorTournaments = async (req, res) => {
 const editTournament = async (req, res) => {
     try {
         const tournamentId = req.params.tournamentId;
-        const { tournamentTitle, subTitle, description, category, location, registrationDeadline, registrationFee, status, prizePoolFirst, prizePoolSecond, prizePoolThird, maxTeams, contactInfo } = req.body;
+        const { tournamentTitle, subTitle, description, category, location, registrationDeadline, registrationFee, status, maxTeams } = req.body;
         const thumbnail = req.file;
 
         let tournament = await Tournament.findById(tournamentId);
@@ -136,7 +98,7 @@ const editTournament = async (req, res) => {
         }
 
 
-        const updateData = { tournamentTitle, subTitle, description, category, location, registrationDeadline, registrationFee, status, prizePoolFirst, prizePoolSecond, prizePoolThird, maxTeams, contactInfo, tournamentThumbnail: tournamentThumbnail?.secure_url };
+        const updateData = { tournamentTitle, subTitle, description, category, location, registrationDeadline, registrationFee, status, maxTeams, tournamentThumbnail: tournamentThumbnail?.secure_url };
 
         tournament = await Tournament.findByIdAndUpdate(tournamentId, updateData, { new: true });
 
@@ -152,66 +114,6 @@ const editTournament = async (req, res) => {
         })
     }
 }
-
-
-
-// const editTournament = async (req, res) => {
-//     try {
-//         const tournamentId = req.params.tournamentId;
-//         const { tournamentTitle, subTitle, description, category, location, registrationDeadline, registrationFee, status, prizePoolFirst, prizePoolSecond, prizePoolThird, maxTeams, contactInfo } = req.body;
-//         const thumbnail = req.file;
-
-//         let tournament = await Tournament.findById(tournamentId);
-//         if (!tournament) {
-//             return res.status(404).json({
-//                 message: "Tournament not found!"
-//             });
-//         }
-
-//         let tournamentThumbnail;
-//         if (thumbnail) {
-//             if (tournament.tournamentThumbnail) {
-//                 const publicId = await getPublicIdFromCloudinary(tournament.tournamentThumbnail);
-//                 if (publicId) {
-//                     await deleteMediaFromCloudinary(publicId); // Delete old image
-//                 }
-//             }
-//             // Upload new thumbnail to Cloudinary
-//             tournamentThumbnail = await uploadMedia(thumbnail.path);
-//         }
-
-//         const updateData = {
-//             tournamentTitle,
-//             subTitle,
-//             description,
-//             category,
-//             location,
-//             registrationDeadline,
-//             registrationFee,
-//             status,
-//             prizePoolFirst,
-//             prizePoolSecond,
-//             prizePoolThird,
-//             maxTeams,
-//             contactInfo,
-//             tournamentThumbnail: tournamentThumbnail?.secure_url
-//         };
-
-//         tournament = await Tournament.findByIdAndUpdate(tournamentId, updateData, { new: true });
-
-//         return res.status(200).json({
-//             tournament,
-//             message: "Tournament updated successfully."
-//         });
-
-//     } catch (error) {
-//         console.log(error);
-//         return res.status(500).json({
-//             message: "Failed to update tournament"
-//         });
-//     }
-// };
-
 
 
 const deleteTournament = async (req, res) => {
@@ -248,46 +150,6 @@ const deleteTournament = async (req, res) => {
         });
     }
 };
-
-
-
-// const deleteTournament = async (req, res) => {
-//     try {
-//         const { tournamentId } = req.params;
-
-//         // Find the tournament
-//         const tournament = await Tournament.findById(tournamentId);
-//         if (!tournament) {
-//             return res.status(404).json({
-//                 success: false,
-//                 message: "Tournament not found!"
-//             });
-//         }
-
-//         // Delete thumbnail from Cloudinary (Safe Way)
-//         if (tournament.tournamentThumbnail) {
-//             const publicId = await getPublicIdFromCloudinary(tournament.tournamentThumbnail);
-//             if (publicId) {
-//                 await deleteMediaFromCloudinary(publicId);
-//             }
-//         }
-
-//         // Delete the tournament from the database
-//         await Tournament.findByIdAndDelete(tournamentId);
-
-//         return res.status(200).json({
-//             success: true,
-//             message: "Tournament deleted successfully!"
-//         });
-//     } catch (error) {
-//         console.error("Error deleting tournament:", error);
-//         return res.status(500).json({
-//             success: false,
-//             message: "Failed to delete tournament. Please try again later."
-//         });
-//     }
-// };
-
 
 const getTournamentById = async (req, res) => {
     try {
@@ -340,29 +202,75 @@ const togglePublishTournament = async (req, res) => {
 const enrollInTournament = async (req, res) => {
     try {
         const { tournamentId } = req.params;
-        const userId = req.user.id; // Ye authMiddleware se milega
+        const userId = req.user._id; // Authenticated User ID
 
-        // Tournament find karo
+        // Check if Tournament Exists
         const tournament = await Tournament.findById(tournamentId);
-        if (!tournament) return res.status(404).json({ message: "Tournament not found" });
-
-        // Check karo ki user pehle se enrolled hai ya nahi
-        if (tournament.enrolledUsers.includes(userId)) {
-            return res.status(400).json({ message: "You are already enrolled in this tournament" });
+        if (!tournament) {
+            return res.status(404).json({ success: false, message: "Tournament not found" });
         }
 
-        // Tournament me user ko enroll karo
+        // Check if User Already Enrolled
+        if (tournament.enrolledUsers.includes(userId)) {
+            return res.status(400).json({ success: false, message: "Already enrolled" });
+        }
+
+        // Enroll User
         tournament.enrolledUsers.push(userId);
         await tournament.save();
 
-        // User schema me bhi enroll update karo
+        // Update User's Enrolled Tournaments
         await User.findByIdAndUpdate(userId, { $push: { enrolledTournaments: tournamentId } });
 
-        res.status(200).json({ message: "Successfully enrolled in tournament" });
+        return res.status(200).json({
+            success: true,
+            message: "Enrolled successfully!",
+            redirectUrl: "/tournament-progress",
+        });
 
     } catch (error) {
-        res.status(500).json({ message: "Internal Server Error", error });
+        console.log(error);
+        return res.status(500).json({ success: false, message: "Server error" });
     }
 };
 
-module.exports = { createTournament, searchTournament, getPublishedTournament, getCreatorTournaments, editTournament, deleteTournament, getTournamentById, togglePublishTournament, enrollInTournament };
+
+const getEnrolledTournaments = async (req, res) => {
+    try {
+        const userId = req.id;
+
+        // Find User and Populate Enrolled Tournaments
+        const user = await User.findById(userId).populate("enrolledTournaments");
+
+        return res.status(200).json({
+            success: true,
+            tournaments: user.enrolledTournaments || [],
+        });
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ success: false, message: "Server error" });
+    }
+};
+
+const getTournamentDetailWithStatus = async (req, res) => {
+    try {
+      const { tournamentId } = req.params;
+  
+      const tournament = await Tournament.findById(tournamentId).populate("creator");
+  
+      if (!tournament) {
+        return res.status(404).json({ message: "Tournament not found" });
+      }
+  
+      // Check if user is enrolled
+      const enrolled = tournament.enrolledUsers.includes(req.user._id);
+  
+      return res.status(200).json({ tournament, enrolled });
+    } catch (error) {
+        console.error("Error in getTournamentDetailWithStatus:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  };
+  
+module.exports = { createTournament, getPublishedTournament, getCreatorTournaments, editTournament, deleteTournament, getTournamentById, togglePublishTournament, enrollInTournament, getEnrolledTournaments, getTournamentDetailWithStatus };

@@ -50,14 +50,15 @@ export const authApi = createApi({
         loadUser: builder.query({
             query: () => ({
                 url:"profile",
-                method:"GET"
+                method:"GET",
+                credentials: "include"
             }),
             async onQueryStarted(_, {queryFulfilled, dispatch}) {
                 try {
                     const result = await queryFulfilled;
                     dispatch(userLoggedIn({user:result.data.user}));
                 } catch (error) {
-                    console.log(error);
+                    console.log("Profile Fetch Error:", error);
                 }
             }
         }),

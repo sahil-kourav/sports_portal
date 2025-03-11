@@ -1,91 +1,89 @@
-import BuyTournamentButton from "@/components/BuyTournamentButton";
+import EnrollTournamentButton from "@/components/EnrollTournamentButton";
 import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
+  CardDescription,
 } from "@/components/ui/card";
-import { BadgeInfo } from "lucide-react";
+import { BadgeInfo, CheckCircle } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import { useGetTournamentDetailWithStatusQuery } from "@/features/api/purchaseApi";
-// import { BadgeInfo, Lock, PlayCircle } from "lucide-react";
-import React from "react";
-// import ReactPlayer from "react-player";
+import { useGetTournamentDetailWithStatusQuery } from "@/features/api/tournamentApi";
+import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 const TournamentDetail = () => {
-  const params = useParams();
-  const tournamentId = params.tournamentId;
+  const { tournamentId } = useParams();
   const navigate = useNavigate();
-  const { data, isLoading, isError } =
-    useGetTournamentDetailWithStatusQuery(tournamentId);
+  const { data, isLoading, isError } = useGetTournamentDetailWithStatusQuery(tournamentId);
 
-  if (isLoading) return <h1>Loading...</h1>;
-  if (isError) return <h>Failed to load tournament details</h>;
-
-  const { tournament, purchased } = data;
-  console.log(purchased);
-
-  const handleContinueTournament = () => {
-    if (purchased) {
-      navigate(`/tournament-progress/${tournamentId}`)
+  useEffect(() => {
+    if (data?.enrolled) {
+      navigate(`/tournament-progress/${tournamentId}`);
     }
-  }
+  }, [data, navigate, tournamentId]);
+
+  if (isLoading) return <h1 className="text-center mt-10 text-xl">Loading tournament details...</h1>;
+  if (isError) return <h1 className="text-center mt-10 text-red-500">Failed to load tournament details</h1>;
+
+  const { tournament, enrolled } = data; 
 
   return (
-    <div className="space-y-5">
-      <div className="bg-[#2D2F31] text-white">
-        <div className="max-w-7xl mx-auto py-8 px-4 md:px-8 flex flex-col gap-2">
-          <h1 className="font-bold text-2xl md:text-3xl">
-            {tournament?.tournamentTitle}
-          </h1>
-          <p className="text-base md:text-lg">{tournament?.subTitle} </p>
-          <p>
-            Created By{" "}
-            <span className="text-[#C0C4FC] underline italic">
-              {tournament.creator?.name}
-            </span>
+    <div className="space-y-10">
+      <div className="bg-[#1E1E1E] text-white py-12">
+        <div className="max-w-7xl mx-auto px-6 md:px-10 text-center">
+          <h1 className="text-3xl md:text-4xl font-extrabold">{tournament?.tournamentTitle}</h1>
+          <p className="mt-2 text-lg opacity-80">{tournament?.subTitle}</p>
+          <p className="mt-1 text-sm italic">
+            Created By: 
+            <span className="text-[#C0C4FC] underline ml-1">{tournament.creator?.name}</span>
           </p>
-          <div className="flex items-center gap-2 text-sm">
-            <BadgeInfo size={16} />
-            <p>Last updated</p>
-            {tournament?.createdAt.split("T")[0]}
-          </div>
-          <p>Users enrolled: {tournament?.enrolledUsers.length} </p>
-
+          <p className="mt-1 text-sm flex items-center justify-center gap-1">
+            <BadgeInfo size={16} /> Last updated: {tournament?.createdAt.split("T")[0]}
+          </p>
+          <p className="mt-2 text-base">📌 Users enrolled: <strong>{tournament?.enrolledUsers.length}</strong></p>
         </div>
       </div>
-      <div className="max-w-7xl mx-auto my-5 px-4 md:px-8 flex flex-col lg:flex-row justify-between gap-10">
-        <div className="w-full lg:w-1/2 space-y-5">
-          <h1 className="font-bold text-xl md:text-2xl">About the Tournament</h1>
-          <p
-            className="text-sm"
-            dangerouslySetInnerHTML={{ __html: tournament.description }}
-          />
-         
+
+      <div className="max-w-7xl mx-auto px-6 md:px-10 flex flex-col lg:flex-row gap-10">
+        <div className="w-full lg:w-2/3 space-y-6">
+          <div>
+            <h2 className="text-xl md:text-2xl font-bold">About the Tournament</h2>
+            <p className="text-gray-700 mt-2" dangerouslySetInnerHTML={{ __html: tournament.description }} />
+          </div>
 
           <Card>
             <CardHeader>
-              <CardTitle>Tournament Content</CardTitle>
-              <CardDescription>Rules</CardDescription>
+              <CardTitle>📜 Tournament Rules & Guidelines</CardTitle>
+              <CardDescription>Everything you need to know before you start.</CardDescription>
             </CardHeader>
+            <CardContent className="p-6">
+              <ul className="list-disc pl-5 text-sm text-gray-700 space-y-2">
+                <li>Follow fair play guidelines.</li>
+                <li>Ensure you have registered before the deadline.</li>
+                <li>Respect all players and officials.</li>
+                <li>Maintain good sportsmanship at all times.</li>
+              </ul>
+            </CardContent>
           </Card>
         </div>
+
         <div className="w-full lg:w-1/3">
           <Card>
-            <CardContent className="p-4 flex flex-col">
-              <h1>Tournament title</h1>
-              <Separator className="my-2" />
-              <h1 className="text-lg md:text-xl font-semibold">Registration Fees: {tournament.registrationFee}</h1>
+            <CardContent className="p-6 text-center">
+              <h2 className="text-xl font-semibold">💰 Registration Fees</h2>
+              <Separator className="my-3" />
+              <h3 className="text-lg font-bold text-green-600">₹{tournament.registrationFee}</h3>
             </CardContent>
-            <CardFooter className="flex justify-center p-4">
-              {purchased ? (
-                <Button onClick={handleContinueTournament} className="w-full">Continue tournament</Button>
+            <CardFooter className="flex justify-center p-6">
+              {enrolled ? (
+                <Button onClick={() => navigate(`/tournament-progress/${tournamentId}`)} className="w-full bg-green-500 hover:bg-green-600">
+                   Continue Tournament
+                </Button>
               ) : (
-                <BuyTournamentButton tournamentId={tournamentId} />
+                <EnrollTournamentButton tournamentId={tournamentId} />
               )}
             </CardFooter>
           </Card>
@@ -96,120 +94,3 @@ const TournamentDetail = () => {
 };
 
 export default TournamentDetail;
-
-
-
-
-
-
-// import BuyTournamentButton from "@/components/BuyTournamentButton";
-// import { Button } from "@/components/ui/button";
-// import {
-//   Card,
-//   CardContent,
-//   CardDescription,
-//   CardFooter,
-//   CardHeader,
-//   CardTitle,
-// } from "@/components/ui/card";
-// // import { Separator } from "@/components/ui/separator";
-// import { useGetTournamentDetailWithStatusQuery } from "@/features/api/purchaseApi";
-// import { BadgeInfo, Lock, PlayCircle } from "lucide-react";
-// import React from "react";
-// import ReactPlayer from "react-player";
-// import { useNavigate, useParams } from "react-router-dom";
-
-// const TournamentDetail = () => {
-//   const params = useParams();
-//   const tournamentId = params.tournamentId;
-//   const navigate = useNavigate();
-//   const { data, isLoading, isError } =
-//     useGetTournamentDetailWithStatusQuery(tournamentId);
-
-//   if (isLoading) return <h1>Loading...</h1>;
-//   if (isError) return <h>Failed to load tournament details</h>;
-
-//   const { tournament, purchased } = data;
-//   console.log(purchased);
-
-//   const handleContinueTournament = () => {
-//     if(purchased){
-//       navigate(`/tournament-progress/${tournamentId}`)
-//     }
-//   }
-
-//   return (
-//     <div className="space-y-5">
-//       <div className="bg-[#2D2F31] text-white">
-//         <div className="max-w-7xl mx-auto py-8 px-4 md:px-8 flex flex-col gap-2">
-//           <h1 className="font-bold text-2xl md:text-3xl">
-//             {/* {tournament?.tournamentTitle} */} Tournament Title
-//           </h1>
-//           <p className="text-base md:text-lg">Tournament Sub-title</p>
-//           <p>
-//             Created By{" "}
-//             <span className="text-[#C0C4FC] underline italic">
-//               {tournament?.creator.name}
-//             </span>
-//           </p>
-//           <div className="flex items-center gap-2 text-sm">
-//             <BadgeInfo size={16} />
-//             <p>Last updated {tournament?.createdAt.split("T")[0]}</p>
-//           </div>
-//           <p>Players enrolled: </p>
-//         </div>
-//       </div>
-//       <div className="max-w-7xl mx-auto my-5 px-4 md:px-8 flex flex-col lg:flex-row justify-between gap-10">
-//         <div className="w-full lg:w-1/2 space-y-5">
-//           <h1 className="font-bold text-xl md:text-2xl">Description</h1>
-//           <p
-//             className="text-sm"
-//             dangerouslySetInnerHTML={{ __html: tournament.description }}
-//           />
-//           <Card>
-//             <CardHeader>
-//               <CardTitle>Tournament Content</CardTitle>
-//               <CardDescription>4 matches</CardDescription>
-//             </CardHeader>
-//             <CardContent className="space-y-3">
-//               {tournament.matches.map((match, idx) => (
-//                 <div key={idx} className="flex items-center gap-3 text-sm">
-//                   <span>
-//                     {true ? <PlayCircle size={14} /> : <Lock size={14} />}
-//                   </span>
-//                   <p>{match.matchTitle}</p>
-//                 </div>
-//               ))}
-//             </CardContent>
-//           </Card>
-//         </div>
-//         <div className="w-full lg:w-1/3">
-//           <Card>
-//             <CardContent className="p-4 flex flex-col">
-//               <div className="w-full aspect-video mb-4">
-//                 <ReactPlayer
-//                   width="100%"
-//                   height={"100%"}
-//                   url={tournament.matches[0].videoUrl}
-//                   controls={true}
-//                 />
-//               </div>
-//               <h1>Match title</h1>
-//               <Separator className="my-2" />
-//               <h1 className="text-lg md:text-xl font-semibold">Tournament Price</h1>
-//             </CardContent>
-//             <CardFooter className="flex justify-center p-4">
-//               {purchased ? (
-//                 <Button onClick={handleContinueTournament} className="w-full">Continue Tournament</Button>
-//               ) : (
-//                 <BuyTournamentButton tournamentId={tournamentId} />
-//               )}
-//             </CardFooter>
-//           </Card>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default TournamentDetail;
