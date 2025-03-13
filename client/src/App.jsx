@@ -79,7 +79,11 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "tournament-progress/:tournamentId",
-        element: <TournamentProgress />
+        element: (
+          <ProtectedRoute>
+            <TournamentProgress />
+          </ProtectedRoute>
+        ), 
       },
       {
         path: "admin",

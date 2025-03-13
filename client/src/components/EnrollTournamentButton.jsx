@@ -80,7 +80,7 @@ const EnrollTournamentButton = ({ tournamentId }) => {
 
   const enrollInTournament = async () => {
     if (enrolled) {
-      toast.error("You are already enrolled! 🎟️"); // ✅ Show error message
+      toast.error("You are already enrolled! 🎟️");
       return;
     }
     
@@ -110,7 +110,7 @@ const EnrollTournamentButton = ({ tournamentId }) => {
 
   return (
     <Button disabled={loading || enrolled} onClick={enrollInTournament} className="w-full">
-      {loading ? "Enrolling..." : enrolled ? "🎟️ You are already enrolled" : "Enroll Now"}
+      {loading ? "Enrolling..." : enrolled ? "You are already enrolled" : "Enroll Now"}
     </Button>
   );
 };
