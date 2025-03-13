@@ -10,7 +10,7 @@ const generateToken = (res, user, message) => {
     .cookie("token", token, {
       httpOnly: true,
       sameSite: "strict",
-      maxAge: 24 * 60 * 60 * 1000, // 1 day
+      maxAge: 24 * 60 * 60 * 1000,
     })
     .json({
       success: true,
@@ -19,4 +19,4 @@ const generateToken = (res, user, message) => {
     });
 };
 
-module.exports = { generateToken }; // ✅ CommonJS export
+module.exports = { generateToken }; 

@@ -53,12 +53,14 @@ const Navbar = () => {
             <h1 className="hidden md:block font-semibold text-2xl">SportXpert</h1>
           </Link>
         </div>
+        
         {/* <div className="flex ml-auto gap-6 items-center">
           <Link to="/" className="dark:text-white hover:text-gray-500 px-3 py-2 rounded-md">Home</Link>
           <Link to="/about-us" className="dark:text-white hover:text-gray-500  px-3 py-2 rounded-md">About Us</Link>
           <Link to="/contact-us" className="dark:text-white hover:text-gray-500 px-3 py-2 rounded-md">Contact Us</Link>
           <Link to="/services" className="dark:text-white hover:text-gray-500 px-3 py-2 rounded-md">Services</Link>
         </div> */}
+
         <div className="flex items-center gap-6">
           {user ? (
             <DropdownMenu>
