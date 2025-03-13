@@ -3,7 +3,6 @@ const { login, register, getUserProfile, logout, updateProfile
 } = require("../controllers/user.controller");
 const isAuthenticated = require("../middlewares/isAuthenticated");
 const upload = require ("../utils/multer");
-
 const router = express.Router();
 
 router.route("/register").post(register);

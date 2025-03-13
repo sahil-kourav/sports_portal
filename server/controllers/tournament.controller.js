@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const User = require("../models/user.model"); 
+const User = require("../models/user.model");
 const Tournament = require("../models/tournament.model");
 
 const { deleteMediaFromCloudinary, uploadMedia } = require("../utils/cloudinary");
@@ -204,6 +204,11 @@ const enrollInTournament = async (req, res) => {
         const { tournamentId } = req.params;
         const userId = req.user._id; // Authenticated User ID
 
+        // Validate Tournament ID
+        if (!tournamentId || tournamentId.length !== 24) {
+            return res.status(400).json({ success: false, message: "Invalid Tournament ID" });
+        }
+
         // Check if Tournament Exists
         const tournament = await Tournament.findById(tournamentId);
         if (!tournament) {
@@ -253,24 +258,52 @@ const getEnrolledTournaments = async (req, res) => {
     }
 };
 
+// const getTournamentDetailWithStatus = async (req, res) => {
+//     try {
+//         const { tournamentId } = req.params;
+
+//         const tournament = await Tournament.findById(tournamentId).populate("creator");
+
+//         if (!tournament) {
+//             return res.status(404).json({ message: "Tournament not found" });
+//         }
+
+//         // Check if user is enrolled
+//         const enrolled = tournament.enrolledUsers.includes(req.user._id);
+
+//         return res.status(200).json({ tournament, enrolled });
+//     } catch (error) {
+//         console.error("Error in getTournamentDetailWithStatus:", error);
+//         res.status(500).json({ message: "Internal server error" });
+//     }
+// };
+
 const getTournamentDetailWithStatus = async (req, res) => {
     try {
-      const { tournamentId } = req.params;
-  
-      const tournament = await Tournament.findById(tournamentId).populate("creator");
-  
-      if (!tournament) {
-        return res.status(404).json({ message: "Tournament not found" });
-      }
-  
-      // Check if user is enrolled
-      const enrolled = tournament.enrolledUsers.includes(req.user._id);
-  
-      return res.status(200).json({ tournament, enrolled });
+        const { tournamentId } = req.params;
+
+        // Validate Tournament ID
+        if (!tournamentId || tournamentId.length !== 24) {
+            return res.status(400).json({ success: false, message: "Invalid Tournament ID" });
+        }
+
+        const tournament = await Tournament.findById(tournamentId).populate("creator");
+
+        if (!tournament) {
+            return res.status(404).json({ success: false, message: "Tournament not found" });
+        }
+
+        // Check if user is enrolled
+        const enrolled = tournament.enrolledUsers.includes(req.user._id);
+
+        return res.status(200).json({ success: true, tournament, enrolled });
+
     } catch (error) {
         console.error("Error in getTournamentDetailWithStatus:", error);
-      res.status(500).json({ message: "Internal server error" });
+        return res.status(500).json({ success: false, message: "Internal server error" });
     }
-  };
-  
+};
+
+
+
 module.exports = { createTournament, getPublishedTournament, getCreatorTournaments, editTournament, deleteTournament, getTournamentById, togglePublishTournament, enrollInTournament, getEnrolledTournaments, getTournamentDetailWithStatus };

@@ -3,12 +3,14 @@ import { Badge } from "@/components/ui/badge";
 import React from "react";
 import { Link } from "react-router-dom";
 
+
 const Tournament = ({ tournament }) => {
   return (
     <Link
       to={`/tournament-detail/${tournament._id}`}
       className="border border-gray-300 rounded-lg overflow-hidden transition-transform duration-200 hover:scale-[1.02] shadow-sm"
     >
+      
       {/* Tournament Image */}
       <img
         src={tournament.tournamentThumbnail|| "NA"}
