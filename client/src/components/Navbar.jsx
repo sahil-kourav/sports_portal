@@ -140,9 +140,9 @@ const MobileNavbar = ({ user, handleLogout }) => {
         <Separator className="mr-2" />
 
         <nav className="flex flex-col space-y-1">
-          <SheetClose asChild>
+          {/* <SheetClose asChild>
             <Link to="/" className="dark:text-white hover:text-gray-500 px-3 py-2 rounded-md">Home</Link>
-          </SheetClose>
+          </SheetClose> */}
 
           {/* <SheetClose asChild>
             <Link to="/about" className="dark:text-white hover:text-gray-500 px-3 py-2 rounded-md">About</Link>

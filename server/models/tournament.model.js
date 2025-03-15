@@ -5,10 +5,19 @@ const tournamentSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    subTitle: { type: String },
-    description: { type: String },
+    subTitle: {
+        type: String
+    },
+    description: {
+        type: String
+    },
+    tournamentRules: {
+        type: String
+    },
 
-    location: { type: String },
+    location: {
+        type: String
+    },
 
 
     creator: {
@@ -17,8 +26,13 @@ const tournamentSchema = new mongoose.Schema({
         required: true
     },
 
-    registrationDeadline: { type: Date },
-    registrationFee: { type: Number, default: 0 },
+    registrationDeadline: {
+        type: Date
+    },
+    registrationFee: {
+        type: Number,
+        default: 0
+    },
 
     tournamentThumbnail: {
         type: String,
@@ -28,14 +42,17 @@ const tournamentSchema = new mongoose.Schema({
     category: {
         type: String,
         enum: [
-                "Cricket", "Football", "Basketball", "Tennis", "Badminton", 
-                "Hockey", "Volleyball", "Kabaddi", "Kho Kho",
-                "Kushti", "Archery", "Wrestling", "Online Gaming", "Other"
-              ],
+            "Cricket", "Football", "Basketball", "Tennis", "Badminton",
+            "Hockey", "Volleyball", "Kabaddi", "Kho Kho",
+            "Kushti", "Archery", "Wrestling", "Online Gaming", "Other"
+        ],
         required: true
     },
 
-    maxTeams: { type: Number, default: 20 },
+    maxTeams: {
+        type: Number,
+        default: 20
+    },
 
     status: {
         type: String,

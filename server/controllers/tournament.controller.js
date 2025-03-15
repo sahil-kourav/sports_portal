@@ -35,6 +35,47 @@ const createTournament = async (req, res) => {
     }
 };
 
+const searchTournament = async (req, res) => {
+    try {
+        const { query = "", categories = [], sortByPrice = "" } = req.query;
+        console.log(categories);
+        
+        // create search query
+        const searchCriteria = {
+            isPublished: true,
+            $or: [
+                { tournamentTitle: { $regex: query, $options: "i" } },
+                { subTitle: { $regex: query, $options: "i" } },
+                { category: { $regex: query, $options: "i" } },
+            ]
+        };
+
+        // if categories selected
+        if (categories.length > 0) {
+            searchCriteria.category = { $in: categories };
+        }
+
+        // define sorting order
+        const sortOptions = {};
+        if (sortByPrice === "low") {
+            sortOptions.registrationFee = 1; // sort by price in ascending
+        } else if (sortByPrice === "high") {
+            sortOptions.registrationFee = -1; // descending
+        }
+
+        let tournaments = await Tournament.find(searchCriteria)
+            .populate({ path: "creator", select: "name photoUrl" })
+            .sort(sortOptions);
+
+        return res.status(200).json({
+            success: true,
+            tournaments: tournaments || []
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 
 const getPublishedTournament = async (_, res) => {
     try {
@@ -78,7 +119,7 @@ const getCreatorTournaments = async (req, res) => {
 const editTournament = async (req, res) => {
     try {
         const tournamentId = req.params.tournamentId;
-        const { tournamentTitle, subTitle, description, category, location, registrationDeadline, registrationFee, status, maxTeams } = req.body;
+        const { tournamentTitle, subTitle, description, tournamentRules, category, location, registrationDeadline, registrationFee, status, maxTeams } = req.body;
         const thumbnail = req.file;
 
         let tournament = await Tournament.findById(tournamentId);
@@ -98,7 +139,7 @@ const editTournament = async (req, res) => {
         }
 
 
-        const updateData = { tournamentTitle, subTitle, description, category, location, registrationDeadline, registrationFee, status, maxTeams, tournamentThumbnail: tournamentThumbnail?.secure_url };
+        const updateData = { tournamentTitle, subTitle, description, tournamentRules, category, location, registrationDeadline, registrationFee, status, maxTeams, tournamentThumbnail: tournamentThumbnail?.secure_url };
 
         tournament = await Tournament.findByIdAndUpdate(tournamentId, updateData, { new: true });
 
@@ -306,4 +347,4 @@ const getTournamentDetailWithStatus = async (req, res) => {
 
 
 
-module.exports = { createTournament, getPublishedTournament, getCreatorTournaments, editTournament, deleteTournament, getTournamentById, togglePublishTournament, enrollInTournament, getEnrolledTournaments, getTournamentDetailWithStatus };
+module.exports = { createTournament, searchTournament, getPublishedTournament, getCreatorTournaments, editTournament, deleteTournament, getTournamentById, togglePublishTournament, enrollInTournament, getEnrolledTournaments, getTournamentDetailWithStatus };

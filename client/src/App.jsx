@@ -22,6 +22,7 @@ import {
   ProtectedRoute,
 } from "./components/ProtectedRoutes";
 import MyTournament from './pages/users/MyTournament';
+import SearchPage from './pages/users/SearchPage';
 
 const appRouter = createBrowserRouter([
   {
@@ -66,6 +67,14 @@ const appRouter = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <MyTournament />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "tournament/search",
+        element: (
+          <ProtectedRoute>
+            <SearchPage />
           </ProtectedRoute>
         ),
       },

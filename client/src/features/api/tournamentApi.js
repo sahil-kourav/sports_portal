@@ -6,7 +6,7 @@ export const tournamentApi = createApi({
   reducerPath: "tournamentApi",
   tagTypes: ["Refetch_Creator_Tournament", "Refetch_Enrolled_Tournaments"],
   baseQuery: fetchBaseQuery({
-    baseUrl: TOURNAMENT_API,  
+    baseUrl: TOURNAMENT_API,
     credentials: "include",
   }),
   endpoints: (builder) => ({
@@ -18,6 +18,30 @@ export const tournamentApi = createApi({
       }),
       invalidatesTags: ["Refetch_Creator_Tournament"],
     }),
+
+    getSearchTournament: builder.query({
+      query: ({ searchQuery, categories, sortByPrice }) => {
+        // Build query string
+        let queryString = `/search?query=${encodeURIComponent(searchQuery)}`;
+
+        // Append category
+        if (categories && categories.length > 0) {
+          const categoriesString = categories.map(encodeURIComponent).join(",");
+          queryString += `&categories=${categoriesString}`;
+        }
+
+        // Append sortByPrice if available
+        if (sortByPrice) {
+          queryString += `&sortByPrice=${encodeURIComponent(sortByPrice)}`;
+        }
+
+        return {
+          url: queryString,
+          method: "GET",
+        };
+      },
+    }),
+
 
     getPublishedTournament: builder.query({
       query: () => ({ url: "/published-tournaments", method: "GET" }),
@@ -89,13 +113,14 @@ export const tournamentApi = createApi({
 
 export const {
   useCreateTournamentMutation,
+  useGetSearchTournamentQuery,
   useGetPublishedTournamentQuery,
   useGetCreatorTournamentQuery,
   useEditTournamentMutation,
   useDeleteTournamentMutation,
   useGetTournamentByIdQuery,
   usePublishTournamentMutation,
-  useEnrollInTournamentMutation, 
-  useGetEnrolledTournamentsQuery,  
+  useEnrollInTournamentMutation,
+  useGetEnrolledTournamentsQuery,
   useGetTournamentDetailWithStatusQuery,
 } = tournamentApi;

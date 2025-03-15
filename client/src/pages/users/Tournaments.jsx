@@ -30,6 +30,7 @@ console.log(data);
             data?.tournaments && data.tournaments.map((tournament, index) => <Tournament key={index} tournament={tournament}/>) 
            )}
          </div>
+
       </div>
     </section>
   );

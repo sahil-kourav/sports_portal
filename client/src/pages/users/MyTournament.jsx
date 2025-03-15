@@ -5,11 +5,6 @@ import { useLoadUserQuery } from "@/features/api/authApi";
 const MyTournament = () => {
   const { data, isLoading } = useLoadUserQuery();
   const myTournament = data?.user.enrolledTournaments || [];
-  console.log("API Response:", data);
-  console.log("User Object:", data?.user);
-  console.log("Enrolled Tournaments:", data?.user?.enrolledTournaments);
-  
-
 
   return (
     <div className="max-w-4xl mx-auto my-10 px-4 md:px-0">
@@ -28,28 +23,6 @@ const MyTournament = () => {
           </div>
         )}
       </div>
-
-
-
-
-      {/* <div className="my-5">
-        {isLoading ? (
-          <MyTournamentSkeleton />
-        ) : !myTournament || myTournament.length === 0 ? (
-          <p>You are not enrolled in any tournament.</p>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {myTournament.map((tournament, index) =>
-              tournament && tournament._id ? ( // ✅ ID check added
-                <Tournament key={tournament._id} tournament={tournament} />
-              ) : (
-                <p key={index}>Invalid tournament data</p>
-              )
-            )}
-          </div>
-        )}
-      </div> */}
-
     </div>
   );
 };

@@ -115,7 +115,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 const TournamentDetail = () => {
   const { tournamentId } = useParams();
-  console.log("Tournament ID from URL:", tournamentId);
+  // console.log("Tournament ID from URL:", tournamentId);
 
   const navigate = useNavigate();
   const { data, isLoading, isError } = useGetTournamentDetailWithStatusQuery(tournamentId);
@@ -173,14 +173,17 @@ const TournamentDetail = () => {
         </div>
 
         <div className="w-full lg:w-1/3">
-          <Card className="shadow-lg rounded-xl">
-            <CardContent className="p-4 text-center space-y-2">
-              <h2 className="text-2xl font-bold">🎟 Enroll Now</h2>
-              <p className="text-lg opacity-80">Join the tournament and showcase your skills!</p>
+          <Card className="rounded-2xl overflow-hidden border border-gray-200 transition duration-300">
+            <CardContent className="p-6 text-center space-y-1 bg-gradient-to-r from-blue-50 to-indigo-50">
+              <h2 className="text-xl font-bold text-gray-700"> Book Your Spot</h2>
+              <p className="text-md text-gray-700">Join the tournament and showcase your skills!</p>
             </CardContent>
-            <CardFooter className="flex justify-center p-6">
+            <CardFooter className="flex justify-center p-6 bg-white">
               {enrolled ? (
-                <Button onClick={() => navigate(`/tournament-progress/${tournamentId}`)} className="w-full bg-green-500 hover:bg-green-600">
+                <Button
+                  onClick={() => navigate(`/tournament-progress/${tournamentId}`)}
+                  className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-1 rounded-lg transition duration-300"
+                >
                   Continue Tournament
                 </Button>
               ) : (
@@ -189,6 +192,7 @@ const TournamentDetail = () => {
             </CardFooter>
           </Card>
         </div>
+
       </div>
     </div>
   );

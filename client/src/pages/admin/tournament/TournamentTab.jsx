@@ -40,9 +40,6 @@ const TournamentTab = () => {
     registrationFee: "",
     registrationDeadline: "",
     status: "",
-    prizePoolFirst: "",
-    prizePoolSecond: "",
-    prizePoolThird: "",
     maxTeams: "",
     contactInfo: "",
   });
@@ -70,9 +67,6 @@ const TournamentTab = () => {
         registrationFee: tournament.registrationFee,
         registrationDeadline: tournament.registrationDeadline,
         status: tournament.status,
-        prizePoolFirst: tournament.prizePoolFirst,
-        prizePoolSecond: tournament.prizePoolSecond,
-        prizePoolThird: tournament.prizePoolThird,
         maxTeams: tournament.maxTeams,
         contactInfo: tournament.contactInfo,
         tournamentThumbnail: "",
@@ -86,10 +80,6 @@ const TournamentTab = () => {
   const changeEventHandler = (e) => {
     const { name, value } = e.target;
     setInput({ ...input, [name]: value });
-  };
-
-  const selectCategory = (value) => {
-    setInput({ ...input, category: value });
   };
 
   // get file
@@ -120,7 +110,6 @@ const TournamentTab = () => {
       toast.error("Failed to update tournament");
     }
   };
-
 
 
   const publishStatusHandler = async (action) => {
@@ -186,39 +175,7 @@ const TournamentTab = () => {
             <Label className="mb-2 block">registrationDeadline</Label>
             <Input type="date" name="registrationDeadline" value={input.registrationDeadline} onChange={changeEventHandler} />
           </div>
-
-          <div>
-            <Label>Category</Label>
-            <Select
-              defaultValue={input.category}
-              onValueChange={selectCategory}
-            >
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Select a category" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <Select>
-                    <SelectItem value="Cricket">Cricket</SelectItem>
-                    <SelectItem value="Football">Football</SelectItem>
-                    <SelectItem value="Basketball">Basketball</SelectItem>
-                    <SelectItem value="Tennis">Tennis</SelectItem>
-                    <SelectItem value="Badminton">Badminton</SelectItem>
-                    <SelectItem value="Hockey">Hockey</SelectItem>
-                    <SelectItem value="Volleyball">Volleyball</SelectItem>
-                    <SelectItem value="Kabaddi">Kabaddi</SelectItem>
-                    <SelectItem value="Kho Kho">Kho Kho</SelectItem>
-                    <SelectItem value="Kushti">Kushti</SelectItem>
-                    <SelectItem value="Archery">Archery</SelectItem>
-                    <SelectItem value="Wrestling">Wrestling</SelectItem>
-                    <SelectItem value="Online Gaming">Online Gaming</SelectItem>
-                    <SelectItem value="Other">Other</SelectItem>
-                  </Select>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
-
+          
           <div>
             <Label className="mb-2 block">Registration Fee (INR)</Label>
             <Input type="number" name="registrationFee" value={input.registrationFee} onChange={changeEventHandler} placeholder="Ex. 499" />
@@ -236,21 +193,6 @@ const TournamentTab = () => {
                 </SelectGroup>
               </SelectContent>
             </Select>
-          </div>
-
-          <div>
-            <Label>First Prize (INR)</Label>
-            <Input type="number" name="prizePoolFirst" value={input.prizePoolFirst} onChange={changeEventHandler} placeholder="Ex. 100000" />
-          </div>
-
-          <div>
-            <Label>Second Prize (INR)</Label>
-            <Input type="number" name="prizePoolSecond" value={input.prizePoolSecond} onChange={changeEventHandler} placeholder="Ex. 100000" />
-          </div>
-
-          <div>
-            <Label>Third Prize (INR)</Label>
-            <Input type="number" name="prizePoolThird" value={input.prizePoolThird} onChange={changeEventHandler} placeholder="Ex. 100000" />
           </div>
 
           <div>
