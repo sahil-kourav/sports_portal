@@ -1,0 +1,202 @@
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useRegisterUserMutation } from "@/features/api/authApi";
+import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
+const Register = () => {
+  const [registerInput, setRegisterInput] = useState({
+    name: "",
+    email: "",
+    password: "",
+    number: "",
+    address: "",
+    dob: "",
+  });
+
+  const [
+    registerUser,
+    {
+      data: registerData,
+      error: registerError,
+      isLoading: registerIsLoading,
+      isSuccess: registerIsSuccess,
+    },
+  ] = useRegisterUserMutation();
+
+  const navigate = useNavigate();
+
+  // Handle Input Changes
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setRegisterInput({ ...registerInput, [name]: value });
+  };
+
+  // Handle Registration
+  const handleRegister = async () => {
+    const { name, email, password, number, address, dob } = registerInput;
+    if (!name || !email || !password || !number || !address || !dob) {
+      toast.error("All fields are required!");
+      return;
+    }
+    await registerUser(registerInput);
+  };
+
+  useEffect(() => {
+    if (registerIsSuccess && registerData) {
+      toast.success(
+        registerData.message || "Registration successful! Redirecting..."
+      );
+      setTimeout(() => navigate("/login"), 1500);
+    }
+
+    if (registerError) {
+      const errorMessage =
+        registerError?.data?.message ||
+        "Registration failed. Please try again.";
+      toast.error(errorMessage);
+    }
+  }, [registerIsSuccess, registerData, registerError, navigate]);
+
+  return (
+    <div className="flex items-center justify-center min-h-screen">
+      <Card className="w-full max-w-md p-2 bg-white rounded-2xl shadow-xs">
+        <CardHeader className="text-center">
+          <CardTitle className="text-3xl mb-2 text-gray-800">
+            Create an Account
+          </CardTitle>
+          <CardDescription className="text-gray-600">
+            Join us today and explore the amazing features we have to offer!
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col space-y-5">
+            <div>
+              <Label htmlFor="name" className="text-gray-700">
+                Full Name*
+              </Label>
+              <Input
+                id="name"
+                name="name"
+                type="text"
+                value={registerInput.name}
+                onChange={handleInputChange}
+                placeholder="Enter your full name"
+                className="w-full bg-gray-100 rounded-md p-2"
+              />
+            </div>
+            <div>
+              <Label htmlFor="email" className="text-gray-700">
+                Email Address*
+              </Label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                value={registerInput.email}
+                onChange={handleInputChange}
+                placeholder="Enter your email"
+                className="w-full bg-gray-100 rounded-md p-2"
+              />
+            </div>
+            <div>
+              <Label htmlFor="password" className="text-gray-700">
+                Create Password*
+              </Label>
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                value={registerInput.password}
+                onChange={handleInputChange}
+                placeholder="Enter your password"
+                className="w-full bg-gray-100 rounded-md p-2"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="dob" className="text-gray-700">
+                Date of Birth*
+              </Label>
+              <Input
+                id="dob"
+                name="dob"
+                type="date"
+                value={registerInput.dob}
+                onChange={handleInputChange}
+                className="w-full bg-gray-100 rounded-md p-2"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="number" className="text-gray-700">
+                Contact Number*
+              </Label>
+              <Input
+                id="number"
+                name="number"
+                type="tel"
+                value={registerInput.number}
+                onChange={handleInputChange}
+                placeholder="Enter your contact number"
+                className="w-full bg-gray-100 rounded-md p-2"
+              />
+            </div>
+            <div>
+              <Label htmlFor="address" className="text-gray-700">
+                Residential Address*
+              </Label>
+              <Input
+                id="address"
+                name="address"
+                type="text"
+                value={registerInput.address}
+                onChange={handleInputChange}
+                placeholder="e.g., New Palasia, Indore, Madhya Pradesh - 452001"
+                className=" w-full bg-gray-100 rounded-md p-2"
+              />
+            </div>
+          </div>
+        </CardContent>
+        <CardFooter className="flex flex-col space-y-4">
+          <Button
+            className="bg-blue-600 w-full hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-200"
+            disabled={registerIsLoading}
+            onClick={handleRegister}
+          >
+            {registerIsLoading ? (
+              <>
+                <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Registering...
+              </>
+            ) : (
+              "Sign Up"
+            )}
+          </Button>
+          <p className="text-center text-sm text-gray-500">
+            Already have an account?{" "}
+            <a href="/login" className="text-blue-600 hover:underline">
+              Login
+            </a>
+          </p>
+          <p className="text-center text-xs text-gray-400 mt-4">
+            Powered by{" "}
+            <span className="font-bold text-gray-700">SportXpert</span>
+          </p>
+        </CardFooter>
+      </Card>
+    </div>
+  );
+};
+
+export default Register;
