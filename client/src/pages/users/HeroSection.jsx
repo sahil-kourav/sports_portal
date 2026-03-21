@@ -92,22 +92,16 @@ const HeroSection = () => {
 
       {/* Hero Content */}
       <div className="text-center max-w-3xl mt-10 relative z-10">
-        <TextType
-          text={[
-            "Discover tournaments that match your skills",
-            "Join exciting competitions near you",
-            "Your next challenge starts here",
-          ]}
-          typingSpeed={70}
-          pauseDuration={1300}
-          showCursor={true}
-          cursorCharacter="_"
-        />
+      <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-gray-900 leading-tight">
+          Discover Tournaments
+          <br />
+          <span className="text-blue-600">That Match Your Skills</span>
+        </h1>
 
-        <p className="text-gray-600 text-base sm:text-lg mt-6 leading-relaxed">
+        <p className="text-gray-400 text-base sm:text-lg mt-6 leading-relaxed">
           India’s ultimate sports portal — where top tournaments, expert guidance,  
           and a passionate community come together.{" "}
-          <span className="text-gray-800 font-semibold">Compete. Connect. Conquer.</span>
+          <span className="text-gray-500 font-semibold">Compete. Connect. Conquer.</span>
         </p>
       </div>
 

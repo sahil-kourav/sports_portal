@@ -15,6 +15,7 @@ import CreateTournament from './pages/admin/tournament/CreateTournament';
 import EditTournament from './pages/admin/tournament/EditTournament';
 import TournamentDetail from './pages/users/TournamentDetail';
 import TournamentProgress from './pages/users/TournamentProgress';
+import NotFound from './pages/NotFound';
 
 import {
   AdminRoute,
@@ -145,6 +146,10 @@ const appRouter = createBrowserRouter([
         ]
       }
     ],
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ])
 

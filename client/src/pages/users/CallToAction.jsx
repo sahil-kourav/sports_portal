@@ -1,26 +1,36 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
 
 const CallToAction = () => {
-  return (
-    <section className="relative  py-24 px-6 md:px-0 flex flex-col items-center text-center">
-      {/* Decorative background circles */}
+  const navigate = useNavigate();
 
-      {/* Content */}
-      <h1 className="relative text-2xl md:text-4xl text-gray-900 font-extrabold mb-4 max-w-2xl">
-        Compete Anytime, Anywhere!
-      </h1>
-      <p className="relative text-gray-600 sm:text-base md:text-lg max-w-3xl mb-8">
-        Join thrilling tournaments, test your skills, and rise to the top. Play, compete, and make your mark in the world of sports!
+  return (
+    <section className="px-6 py-20 text-center">
+      <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 leading-tight max-w-2xl mx-auto">
+        Compete Anytime,{" "}
+        <span className="text-blue-500">Anywhere.</span>
+      </h2>
+      <p className="mt-4 text-gray-400 text-md max-w-xl mx-auto leading-relaxed">
+        Join thrilling tournaments, test your skills, and rise to the top.
+        Play, compete, and make your mark in Indian sports.
       </p>
 
-      {/* Buttons */}
-      <div className="relative flex flex-col sm:flex-row items-center gap-4">
-        <button className="px-8 py-3 rounded-xl text-white bg-blue-600 hover:bg-blue-700 shadow-lg transition-all font-semibold">
-          Get Started
-        </button>
-        <button className="px-8 py-3 rounded-xl text-blue-600 border border-blue-600 hover:bg-blue-50 transition-all font-semibold">
+      <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+        <Button
+          onClick={() => navigate("/register")}
+          className="gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-7 py-3 rounded-lg"
+        >
+          Get Started <ArrowRight size={15} />
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() => navigate("/about-us")}
+          className="px-7 py-3 rounded-lg border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white bg-transparent font-semibold"
+        >
           Learn More
-        </button>
+        </Button>
       </div>
     </section>
   );
