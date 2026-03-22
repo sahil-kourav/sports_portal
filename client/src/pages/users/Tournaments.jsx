@@ -41,11 +41,6 @@ const Tournaments = () => {
         >
           Show all tournaments
         </button>
-
-        {/* Call To Action */}
-        <div className="mt-20">
-          <CallToAction />
-        </div>
       </div>
     </section>
   );

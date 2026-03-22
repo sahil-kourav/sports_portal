@@ -28,6 +28,8 @@ import SearchPage from './pages/users/SearchPage';
 import EnrolledUsers from './pages/admin/tournament/EnrolledUsers';
 import AboutUs from './pages/users/AboutUs';
 import ContactUs from './pages/users/ContectUs';
+import Newsletter from './pages/users/Newsletter';
+import CallToAction from './pages/users/CallToAction';
 
 const appRouter = createBrowserRouter([
   {
@@ -40,6 +42,8 @@ const appRouter = createBrowserRouter([
           <>
             <HeroSection />
             <Tournaments />
+            <CallToAction />
+            <Newsletter />
             <Footer />
           </>
       },
